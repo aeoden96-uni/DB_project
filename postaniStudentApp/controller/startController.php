@@ -9,14 +9,8 @@ class StartController
 
 	private function checkPrivilege(){
 		if (isset($_SESSION["account_type"])){
-			if($_SESSION["account_type"]=="user"){
-				header( 'Location: index.php?rt=main');
-				exit();
-			}
-			elseif($_SESSION["account_type"]=="guest"){
-				header( 'Location: index.php?rt=start/logout');
-				exit();
-			}
+			header("Location: index.php?rt=" . $_SESSION["account_type"]);
+			exit();
 			
 		}
 	}
@@ -215,7 +209,12 @@ class StartController
 		if($check){
 			header("Refresh:2; url=index.php?rt=faks");
 			$succesVar="successful. :)";
-            $_SESSION["account_type"] = "ucenik";
+
+
+            $_SESSION["account_type"] = "faks";
+			$_SESSION["user_id"]= "id2528";
+			$_SESSION["username"]= "username*";
+
 		}
 		else{
 			$succesVar="unsuccessful. :(";
@@ -236,7 +235,11 @@ class StartController
 		if($check){
 			header("Refresh:2; url=index.php?rt=admin");
 			$succesVar="successful. :)";
-            $_SESSION["account_type"] = "ucenik";
+
+
+			$_SESSION["account_type"] = "admin";
+			$_SESSION["user_id"]= "idadmin";
+			$_SESSION["username"]= "username*admin";
 		}
 		else{
 			$succesVar="unsuccessful. :(";
@@ -263,7 +266,10 @@ class StartController
 		if($check){
 			header("Refresh:2; url=index.php?rt=ucenik");
 			$succesVar="successful. :)";
-            $_SESSION["account_type"] = "ucenik";
+
+			$_SESSION["account_type"] = "ucenik";
+			$_SESSION["user_id"]= "iducenik142";
+			$_SESSION["username"]= "username*ucenik";
 		}
 		else{
 			$succesVar="unsuccessful. :(";

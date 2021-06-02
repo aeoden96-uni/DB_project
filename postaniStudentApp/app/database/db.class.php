@@ -1,6 +1,5 @@
 <?php
 
-// Datoteku treba preimenovati u db.class.php
 
 class DB
 {
@@ -38,11 +37,12 @@ class DB2
 	{
 		if( DB2::$db === null ){
 			try{
-				DB2::$db = new MongoDB\Driver\Manager("mongodb://localhost:27017");
+				//DB2::$db = new MongoDB\Driver\Manager("mongodb://localhost:27017");
 
 				//MONGO ATLAS
-				/*$manager= new MongoDB\Driver\Manager("mongodb+srv://temp_user:test123@cluster0.zbco3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
-				}*/
+				DB2::$db = new MongoDB\Driver\Manager("mongodb+srv://mongo_nbp:Lozinka1#@cluster0.03xeq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
+				
+							
 				
 			}
 			catch(MongoConnectionException $e){

@@ -8,16 +8,20 @@ require_once __DIR__ . '/../model/productservice.class.php';
 
 class FaksController
 {
+    function __construct() {
+        $this->USERTYPE="faks";
+    }
+
 	private function checkPrivilege(){
-		if (!isset($_SESSION["account_type"]) || $_SESSION["account_type"]=="guest"){
+		if (!isset($_SESSION["account_type"])){
 			header( 'Location: index.php?rt=start/logout');
 			exit();
 		}
+        if ( $_SESSION["account_type"] != $this->USERTYPE){
+            header( 'Location: index.php?rt=start/logout');
+			exit();
+        }
 	}
-
-
-
-
 
 
 	public function index() {
@@ -30,8 +34,11 @@ class FaksController
 
         $ucenikName="FakultetName";
         $activeInd=0;
+
+		
         
-        require_once __DIR__ . '/../view/ucenik_index.php';    
+        $USERTYPE=$this->USERTYPE;
+        require_once __DIR__ . '/../view/'.$USERTYPE.'/index.php';   
 
 	}
 }

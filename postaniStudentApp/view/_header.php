@@ -58,6 +58,6 @@
   <div class="row">
 
       <!--ENTER SIDE BAR HERE-->
-      <?php include __DIR__ . '/side_bar.php'; ?>   
+      <?php include __DIR__ . '/'.$USERTYPE.'/side_bar.php'; ?>   
 
       <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">

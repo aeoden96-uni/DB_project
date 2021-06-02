@@ -10,16 +10,20 @@ require_once __DIR__ . '/../model/mongoservice.class.php';
 
 class UcenikController
 {
+    function __construct() {
+        $this->USERTYPE="ucenik";
+    }
+
 	private function checkPrivilege(){
-		if (!isset($_SESSION["account_type"]) || $_SESSION["account_type"]=="guest"){
+		if (!isset($_SESSION["account_type"])){
 			header( 'Location: index.php?rt=start/logout');
 			exit();
 		}
+        if ( $_SESSION["account_type"] != $this->USERTYPE){
+            header( 'Location: index.php?rt=start/logout');
+			exit();
+        }
 	}
-
-
-
-
 
 
 	public function index() {
@@ -32,8 +36,9 @@ class UcenikController
 
         $ucenikName="Mateo";
         $activeInd=0;
-        
-        require_once __DIR__ . '/../view/ucenik_index.php';    
+
+        $USERTYPE=$this->USERTYPE;
+        require_once __DIR__ . '/../view/'.$USERTYPE.'/index.php';    
 
 	}
 
@@ -41,34 +46,21 @@ class UcenikController
 	public function myInfo() {
 		session_start();
         $this->checkPrivilege();
-        $ps=new ProductService();
-        $us=new UserService();
 
+        $m= new MongoService();
+
+        $list=$m->returnUcenikWithId("60b6d0a2b000b1fc8a909a6f");
 
 
         $ucenikName="Mateo";
         $activeInd=1;
         
-        require_once __DIR__ . '/../view/ucenik_myInfo.php';    
+        $USERTYPE=$this->USERTYPE;
+        require_once __DIR__ . '/../view/'.$USERTYPE.'/myInfo.php'; 
 
 	}
 
-    public function myList() {
-		session_start();
-        $this->checkPrivilege();
-        $ps=new ProductService();
-        $us=new UserService();
-       
-
-
-        $ucenikName="Mateo";
-        $activeInd=2;
-        
-        require_once __DIR__ . '/../view/ucenik_myList.php';    
-
-	}
-
-    public function browser() {
+    public function myList() {  //LISTA UCENIK -> FAKULTETI
 		session_start();
         $this->checkPrivilege();
         $ps=new ProductService();
@@ -76,16 +68,35 @@ class UcenikController
        
         $m= new MongoService();
 
-        $result=$m->simple2();
+        $list=$m->returnUcenikWithId("60b6d0a2b000b1fc8a909a6f");
 
-        if(!$result){
-            $result="FFFF";
-        }
+        $ucenikName="Mateo";
+        $activeInd=2;
+        
+        $USERTYPE=$this->USERTYPE;
+        require_once __DIR__ . '/../view/'.$USERTYPE.'/myList.php';    
+
+	}
+
+    public function browser() { //LISTA FAKULTETA
+		session_start();
+        $this->checkPrivilege();
+        $ps=new ProductService();
+        $us=new UserService();
+       
+        $m= new MongoService();
+
+        $list=$m->returnAllFaks("60b6c0a9347c4f9454712c79");
+
+        //$result=$m->returnAllFaks();
+        
+        
 
         $ucenikName="Mateo";
         $activeInd=3;
         
-        require_once __DIR__ . '/../view/ucenik_browser.php';    
+        $USERTYPE=$this->USERTYPE;
+        require_once __DIR__ . '/../view/'.$USERTYPE.'/browser.php';    
 
 	}
 
@@ -100,7 +111,8 @@ class UcenikController
         $ucenikName="Mateo";
         $activeInd=4;
         
-        require_once __DIR__ . '/../view/ucenik_results.php';    
+        $USERTYPE=$this->USERTYPE;
+        require_once __DIR__ . '/../view/'.$USERTYPE.'/results.php';    
 
 	}
 
@@ -115,7 +127,8 @@ class UcenikController
         $ucenikName="Mateo";
         $activeInd=5;
         
-        require_once __DIR__ . '/../view/ucenik_otherSettings.php';    
+        $USERTYPE=$this->USERTYPE;
+        require_once __DIR__ . '/../view/'.$USERTYPE.'/otherSettings.php';   
 
 	}
 

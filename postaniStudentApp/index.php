@@ -1,4 +1,9 @@
 <?php 
+
+function isNumber($n){
+	return preg_match('/^[0-9]+$/', $n);
+}
+
 // Provjeri je li postavljena varijabla rt; kopiraj ju u $route
 if( isset( $_GET['rt'] ) )
 	$route = $_GET['rt'];
@@ -8,22 +13,18 @@ else
 // Ako je $route == 'con/act', onda rastavi na $controllerName='con', $action='act'
 $parts = explode( '/', $route );
 
-$controllerName = $parts[0] . 'Controller';
 
 
-if( isset( $parts[1] ) ){
-	$action = $parts[1];
-}
-else
-	$action = 'index';
+
 
 // Controller $controllerName se nalazi poddirektoriju controller
+$controllerName = $parts[0] . 'Controller';
 $controllerFileName = 'controller/' . $controllerName . '.php';
 
 // Includeaj tu datoteku
 if( !file_exists( $controllerFileName ) )
 {
-	$controllerName = '_404Controller';
+	$controllerName = 'startController';
 	$controllerFileName = 'controller/' . $controllerName . '.php';
 }
 
@@ -33,24 +34,36 @@ require_once $controllerFileName;
 $con = new $controllerName;
 
 
-
-if (preg_match('/^[0-9]+$/', $action)) {
-	$ind = 'index';
-	$con->$ind((int)$action);
-}
-else{
-
-	// Ako u njemu nema tražene akcije, stavi da se traži akcija index
-	if( !method_exists( $con, $action ) ){
+switch(count($parts)){
+	case 0:
+	case 1:
 		$action = 'index';
 
-	}
-	$con->$action();
+		$con->$action();
+		break;
+	case 2:
+		$action = $parts[1];
 
+		if( !method_exists( $con, $action ) ){
+			$action = 'index';
+			$con->$action();
+		}
 
+		$con->$action();
+		break;
+	case 3:
+		$action = $parts[1];
+		$number = $parts[2];
+
+		if( !method_exists( $con, $action ) ){
+			$action = 'index';
+			$con->$action();
+		}
+		else{
+			$con->$action((int)$number);
+		}
+		break;
 }
-
-
 
 
 ?>

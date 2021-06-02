@@ -9,11 +9,55 @@ class MongoService
 
         $db = DB2::getConnection(); 
 
+        if ($db == null){
+            return null;
+        }
+
         $query=new MongoDB\Driver\Query([]);
 
-        return $db->executeQuery("mydb.users",$query); //VRACA SVE REZ iz mydb.users kolekcije
+        return $db->executeQuery("my_database.my_coll",$query); //VRACA SVE REZ iz mydb.users kolekcije
 
     }
+
+    function returnAllFaks(){
+
+        $db = DB2::getConnection(); 
+
+        $query=new MongoDB\Driver\Query([]);
+
+        return $db->executeQuery("project.fakulteti",$query); //VRACA SVE fakultete KAO LISTU objekata
+
+    }
+
+    function returnFaksWithId($id){
+
+        $db = DB2::getConnection(); 
+
+        //$id  = new \MongoDB\BSON\ObjectId($id); DODAJ OVO AKO ATLAS RADI SAM SVOJ ID
+        $filter  = ['_id' => $id];
+        $options = [];
+
+        $query = new \MongoDB\Driver\Query($filter, $options);
+
+        return $db->executeQuery("project.fakulteti",$query); //VRACA fakultete s istim ID OPET KAO LISTU objekata
+
+    }
+
+    function returnUcenikWithId($id){
+
+        $db = DB2::getConnection(); 
+
+        //$id  = new \MongoDB\BSON\ObjectId($id); DODAJ OVO AKO ATLAS RADI SAM SVOJ ID
+        $filter  = ['_id' => $id];
+        $options = [];
+
+        $query = new \MongoDB\Driver\Query($filter, $options);
+
+        return $db->executeQuery("project.studenti",$query); //VRACA fakultete s istim ID OPET KAO LISTU objekata
+
+    }
+
+
 
     function simpleOne(){
 
@@ -21,7 +65,7 @@ class MongoService
 
         $query=new MongoDB\Driver\Query([]);
 
-        return $db->executeQuery("mydb.users",$query); //VRACA SVE REZ iz mydb.users kolekcije
+        return $db->executeQuery("my_database.my_coll",$query); //VRACA SVE REZ iz mydb.users kolekcije
 
     }
 

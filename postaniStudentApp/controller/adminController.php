@@ -8,11 +8,19 @@ require_once __DIR__ . '/../model/productservice.class.php';
 
 class AdminController
 {
+	function __construct() {
+        $this->USERTYPE="admin";
+    }
+
 	private function checkPrivilege(){
-		if (!isset($_SESSION["account_type"]) || $_SESSION["account_type"]=="guest"){
+		if (!isset($_SESSION["account_type"])){
 			header( 'Location: index.php?rt=start/logout');
 			exit();
 		}
+        if ( $_SESSION["account_type"] != $this->USERTYPE){
+            header( 'Location: index.php?rt=start/logout');
+			exit();
+        }
 	}
 
 
@@ -28,10 +36,11 @@ class AdminController
         $activeInd=0;
 
 
-        $ucenikName="FakultetName";
+        $ucenikName="Admin Name";
         $activeInd=0;
         
-        require_once __DIR__ . '/../view/admin_index.php';    
+        $USERTYPE=$this->USERTYPE;
+        require_once __DIR__ . '/../view/'.$USERTYPE.'/index.php';   
 
 	}
 }

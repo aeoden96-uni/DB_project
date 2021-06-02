@@ -1,5 +1,5 @@
 
-<?php include __DIR__ . '/_header.php'; ?>
+<?php include __DIR__ . '/../_header.php'; ?>
 
 
 
@@ -132,7 +132,7 @@ my-4 = MARGIN top bottom
                         </tbody>
                       </table>
                 </div>
-                <a href="index.php?rt=ucenik/popis" class="btn btn-block btn-light">View all</a>
+                <a href="index.php?rt=admin/popis" class="btn btn-block btn-light">View all</a>
             </div>
         </div>
     </div>
@@ -162,4 +162,4 @@ my-4 = MARGIN top bottom
       
 
 
-<?php include __DIR__ . '/_footer.php'; ?>
+<?php include __DIR__ . '/../_footer.php'; ?>

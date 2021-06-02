@@ -1,5 +1,5 @@
 
-<?php include __DIR__ . '/_header.php'; ?>
+<?php include __DIR__ . '/../_header.php'; ?>
 
 
 <nav aria-label="breadcrumb">
@@ -11,5 +11,4 @@
 <h1 class="h2">Other settings</h1>
 <p>This is the homepage of a simple admin interface which is part of a tutorial written on Themesberg</p>
 
-
-<?php include __DIR__ . '/_footer.php'; ?>
+<?php include __DIR__ . '/../_footer.php'; ?>
