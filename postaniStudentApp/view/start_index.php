@@ -60,9 +60,9 @@ function yesno(thecheckbox, thelabel,checkbox_conditions) {
 			  <label name="korisnik_checkbox_label" style="margin-bottom:10px;" class="form-check-label" id="korisnik_checkbox_label" for="korisnik_checkbox">Već imam račun</label>
 			</div>
 			<div class="form-group">
-				<input style="margin-bottom:10px;" name="" class="form-control" placeholder="OIB" type="email">
+				<input style="margin-bottom:10px;" name="oib" class="form-control" value="69984765783" placeholder="OIB" >
 				
-				<input style="margin-bottom:10px;" class="form-control" placeholder="******" type="password">
+				<input style="margin-bottom:10px;"  name="ime" class="form-control" value="Ivan" placeholder="******" type="password">
 				<input type="checkbox" id="korisnik_uvjeti">
 				<label name="korisnik_checkbox_label" style="margin-bottom:10px;" class="form-check-label" id="korisnik_uvjeti_label" for="korisnik_checkbox"> Prihvaćam uvjete i politiku privatnosti</label>
 				<br>

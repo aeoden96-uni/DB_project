@@ -1,92 +1,103 @@
 <?php
 require_once __DIR__ . '/../app/database/db.class.php';
-require_once __DIR__ . '/user.class.php';
 
 class MongoService
 {
-
-    function simple(){
-
-        $db = DB2::getConnection(); 
-
-        if ($db == null){
-            return null;
-        }
-
-        $query=new MongoDB\Driver\Query([]);
-
-        return $db->executeQuery("my_database.my_coll",$query); //VRACA SVE REZ iz mydb.users kolekcije
-
-    }
-
+    
     function returnAllFaks(){
 
-        $db = DB2::getConnection(); 
-
-        $query=new MongoDB\Driver\Query([]);
-
-        return $db->executeQuery("project.fakulteti",$query); //VRACA SVE fakultete KAO LISTU objekata
+        return  $this->queryAll("fakulteti");
 
     }
 
     function returnFaksWithId($id){
 
-        $db = DB2::getConnection(); 
-
-        //$id  = new \MongoDB\BSON\ObjectId($id); DODAJ OVO AKO ATLAS RADI SAM SVOJ ID
-        $filter  = ['_id' => $id];
-        $options = [];
-
-        $query = new \MongoDB\Driver\Query($filter, $options);
-
-        return $db->executeQuery("project.fakulteti",$query); //VRACA fakultete s istim ID OPET KAO LISTU objekata
-
+        return $this->queryOne( "fakulteti", "_id", $id);
     }
 
     function returnUcenikWithId($id){
-
-        $db = DB2::getConnection(); 
-
-        //$id  = new \MongoDB\BSON\ObjectId($id); DODAJ OVO AKO ATLAS RADI SAM SVOJ ID
-        $filter  = ['_id' => $id];
-        $options = [];
-
-        $query = new \MongoDB\Driver\Query($filter, $options);
-
-        return $db->executeQuery("project.studenti",$query); //VRACA fakultete s istim ID OPET KAO LISTU objekata
+        
+        return $this->queryOne( "studenti", "_id", $id);
 
     }
 
+    function returnUcenikWithUsername($username){
+        
+        return $this->queryOne( "studenti", "username", $username);
+
+    }
+
+    function queryOne($kolekcija, $atribut, $vrijednost){
+        $db = DB2::getConnection(); 
+
+        if ($atribut== "username")
+            $vrijednost= (int)$vrijednost;
+
+        //$id  = new \MongoDB\BSON\ObjectId($id); DODAJ OVO AKO ATLAS RADI SAM SVOJ ID
+        $filter  = [ $atribut => $vrijednost];
+        $options = [];
 
 
-    function simpleOne(){
+        //https://www.php.net/manual/en/class.mongodb-driver-query.php
+        $query = new \MongoDB\Driver\Query($filter, $options);
 
+        //https://www.php.net/manual/en/mongodb-driver-manager.executequery.php
+        $result = $db->executeQuery("project.".$kolekcija,$query); //VRACA fakultete s istim ID OPET KAO LISTU objekata
+
+        return $result->toArray()[0]; //Vraca samo prvi clan liste ,jer je cijela lista zapravo [ ucenik ]
+            
+    }
+
+    function queryAll($kolekcija){
         $db = DB2::getConnection(); 
 
         $query=new MongoDB\Driver\Query([]);
 
-        return $db->executeQuery("my_database.my_coll",$query); //VRACA SVE REZ iz mydb.users kolekcije
-
+        return $db->executeQuery("project.".$kolekcija,$query)->toArray(); //VRACA SVE fakultete KAO LISTU objekata
     }
 
-    function simple2(){
-
+    function pushNewListToStudentWithId($userId,$lista,$index,$action="UP",$newElement=null){
         $db = DB2::getConnection(); 
+        echo $userId;
 
-        $filter  = [
-            '$or' => [
-                ['age' => ['$lte' => 19]],
-                ['age' => ['$gte' => 50]]
-            ]
-        ];
+        switch($action){
+            case "UP":
+                $temp = $lista[$index-1];
+                $lista[$index-1] = $lista[$index];
+                $lista[$index] = (string)$temp;
 
-        //https://www.php.net/manual/en/class.mongodb-driver-query.php
-        $query = new MongoDB\Driver\Query($filter);
+                break;
+            case "DOWN":
+                $temp = $lista[$index+1];
+                $lista[$index+1] = $lista[$index];
+                $lista[$index] = (string)$temp;
 
-        //https://www.php.net/manual/en/mongodb-driver-manager.executequery.php
-        return $db->executeQuery("mydb.users", $query);  //VRACA USERE s 'age' < 19 ili > 50
+                break;
+
+            case "DEL":
+                $lista=array_diff($lista, array((string)$lista[$index]));
+                
+                break;
+            case "INS":
+                array_splice( $lista, $index, 0, $newElement);
+                
+                break;
+        }
+
+        $bulk = new MongoDB\Driver\BulkWrite;
+        $bulk->update(
+            ['_id' => $userId],
+            ['$set' => ['lista_fakulteta_nova' => $lista  ]],
+            ['multi' => false, 'upsert' => false]
+        );
+
+        $result = $db->executeBulkWrite("project.studenti",$bulk); 
+                
+
+
 
     }
+
 
     
 }

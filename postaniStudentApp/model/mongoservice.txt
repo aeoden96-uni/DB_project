@@ -1,0 +1,63 @@
+<?php
+require_once __DIR__ . '/../app/database/db.class.php';
+
+class MongoService
+{
+    
+    function returnAllFaks(){
+
+        return  $this->queryAll("fakulteti");
+
+    }
+
+    function returnFaksWithId($id){
+
+        return $this->queryOne( "fakulteti", "_id", $id);
+    }
+
+    function returnUcenikWithId($id){
+        
+        return $this->queryOne( "studenti", "_id", $id);
+
+    }
+
+    function returnUcenikWithUsername($username){
+        
+        return $this->queryOne( "studenti", "username", $username);
+
+    }
+
+    function queryOne($kolekcija, $atribut, $vrijednost){
+        $db = DB2::getConnection(); 
+
+        if ($atribut== "username")
+            $vrijednost= (int)$vrijednost;
+
+        //$id  = new \MongoDB\BSON\ObjectId($id); DODAJ OVO AKO ATLAS RADI SAM SVOJ ID
+        $filter  = [ $atribut => $vrijednost];
+        $options = [];
+
+
+        //https://www.php.net/manual/en/class.mongodb-driver-query.php
+        $query = new \MongoDB\Driver\Query($filter, $options);
+
+        //https://www.php.net/manual/en/mongodb-driver-manager.executequery.php
+        $result = $db->executeQuery("project.".$kolekcija,$query); //VRACA fakultete s istim ID OPET KAO LISTU objekata
+
+        foreach ($result as $jedan) //Vraca samo prvi clan liste ,jer je cijela lista zapravo [ ucenik ]
+            return $jedan;
+
+    }
+
+    function queryAll($kolekcija){
+        $db = DB2::getConnection(); 
+
+        $query=new MongoDB\Driver\Query([]);
+
+        return $db->executeQuery("project.".$kolekcija,$query); //VRACA SVE fakultete KAO LISTU objekata
+    }
+
+
+    
+}
+?>

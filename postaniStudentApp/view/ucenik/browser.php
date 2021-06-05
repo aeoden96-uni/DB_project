@@ -1,5 +1,20 @@
 
-<?php include __DIR__ . '/../_header.php'; ?>
+<?php include __DIR__ . '/../_header.php';
+
+function checkList($oib,$listaFaksevaUcenika){
+    
+
+    foreach($listaFaksevaUcenika as $faksOIB){
+        if ($faksOIB == $oib){
+            
+            return true;
+        }
+            
+    }
+    return false;
+
+}
+?>
 
 
 <nav aria-label="breadcrumb">
@@ -31,18 +46,66 @@
                 </thead>
                 <tbody>
                     <?php
+                    $ind=0;
                     foreach($list as $faks){
+                        $c=checkList($faks->oib,$listaFaksevaUcenika);
                         echo 
-                        '<tr>'.
+                        '<tr data-toggle="collapse" data-target="#accordion'.$ind .'" class="clickable collapse-row collapsed">'.
                             '<th scope="row">'.$faks->oib .'</th>'. 
                             '<td>'.$faks->_id .'</td>'. 
                             '<td>'.$faks->naziv .'</td>'.
                             '<td>'.$faks->kvota .'</td>'.
                             '<td>***</td>'.
-                            '<td><a href="#" class="btn btn-sm btn-success">Add</a></td>'.
+                            '<td><a href="index.php?rt=ucenik/myListInsert/'.$faks->oib.'" class="btn btn-sm btn-'. ($c?"secondary":"success") .'">'. ($c?"Added":"Add") .'</a></td>'.
                             '<td><a href="#" class="btn btn-sm btn-primary">View</a></td>'.
 
                         '</tr>';
+
+                        echo 
+                        '<tr>
+                            <td colspan="3">
+                                <div class="row my-4" id="accordion'.$ind.'" class="collapse">
+                                    <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">
+                                        <div class="card">
+                                            <h5 class="card-header">Requirements</h5>
+                                            <div class="card-body">
+                                            <h5 class="card-title">Requirements title</h5>
+                                            <p class="card-text">text.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">
+                                        <div class="card">
+                                            <h5 class="card-header">Quota</h5>
+                                            <div class="card-body">
+                                            <h5 class="card-title">Quota title</h5>
+                                            <p class="card-text">text.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">
+                                        <div class="card">
+                                            <h5 class="card-header">Contact</h5>
+                                            <div class="card-body">
+                                            <h5 class="card-title">Contact title</h5>
+                                            <p class="card-text">text.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">
+                                        <div class="card">
+                                            <h5 class="card-header">Add</h5>
+                                            <div class="card-body">
+                                            <a href="index.php?rt=ucenik/myListInsert/'.$faks->oib.'" class="btn btn-sm btn-'. ($c?"secondary":"success") .'">'. ($c?"Added":"Add") .'</a>
+                                            
+                                           
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>';
+                        $ind+=1;
                     }
                     ?>
                    
@@ -55,21 +118,11 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<style>
+.collapse-row.collapsed + tr {
+  display: none;
+}
+</style>
 
 <?php
 

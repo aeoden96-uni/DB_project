@@ -2,13 +2,24 @@
 <?php include __DIR__ . '/../_header.php'; 
 
 
-function addButtons($link1,$link2){
-    echo '<div class="btn-group mr-2" role="group" aria-label="Second group">
-            <a type="button" href="' . $link1 . '" class="btn btn-secondary">▲</a>
-            <a type="button" class="btn btn-secondary">▼</a>
-        </div>';
+function addButtons($id){
+    
+    return '<div class="btn-group mr-2" role="group" aria-label="Second group">'.
+            '<a type="button" href="index.php?rt=ucenik/myListPushUp/' . $id . '" class="btn btn-secondary">▲</a>'.
+            '<a type="button" href="index.php?rt=ucenik/myListPushDown/' . $id . '" class="btn btn-secondary">▼</a>'.
+        '</div>';
 
 }
+
+function addFirstButtons($id){
+    
+    return '<div class="btn-group mr-2" role="group" aria-label="Second group">'.
+            '<a type="button" href="index.php?rt=ucenik/myListPushDown/' . $id . '" class="btn btn-secondary">▼</a>'.
+        '</div>';
+
+}
+
+
 
 ?>
 
@@ -34,27 +45,29 @@ function addButtons($link1,$link2){
                     <tr>
                     <th scope="col">Prefference</th>
                     <th scope="col">Faculty name</th>
-                    <th scope="col">***</th>
-                    <th scope="col">***</th>
-                    <th scope="col">***</th>
+                    <th scope="col">OIB</th>
+                    <th scope="col">Quota</th>
+                    <th scope="col"></th>
                     <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    foreach($list as $student){ //SAMO JEDAN STUDENT
-                        foreach($student->lista_fakulteta as $faks)
+                    $redBr=0;
+                    foreach($new_list as $faks){
+                        
                         
                         
                         echo 
                         '<tr>'.
-                            '<th scope="row">'.$faks->id .'</th>'. 
-                            '<td>'.$faks->name .'</td>'. 
-                            '<td>***</td>'.
-                            '<td>***</td>'.
-                            '<td>***</td>'.
-                            '<td><a href="#" class="btn btn-sm btn-warning">Remove</a></td>'.
+                            '<th scope="row">'.($redBr+1) .'</th>'. 
+                            '<td>'.$faks->naziv .'</td>'. 
+                            '<td>'.$faks->oib .'</td>'.
+                            '<td>'.$faks->kvota .'</td>'.
+                            '<td>'.(($redBr==0)? addFirstButtons($redBr ):addButtons($redBr )).'</td>'.
+                            '<td><a href="index.php?rt=ucenik/myListDelete/'.$redBr .'" class="btn btn-sm btn-warning">Remove</a></td>'.
                         '</tr>';
+                        $redBr+=1;
                     }
                     ?>
                    

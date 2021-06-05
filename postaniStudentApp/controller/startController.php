@@ -4,6 +4,8 @@
 require_once __DIR__ . '/../model/userservice.class.php';
 require_once __DIR__ . '/../model/user.class.php';
 
+require_once __DIR__ . '/../model/mongoservice.class.php';
+
 class StartController
 {
 
@@ -258,26 +260,42 @@ class StartController
 		 * REDIRECT NA registerUcenik ako SET=true
 		 */
 		session_start();
+		$ms= new MongoService();
+		
 
-		//$check=$us->checkUserLogin();
+		$db=$ms->returnUcenikWithUsername($_POST["oib"]);
 		$check=true;
+		
 
-
-		if($check){
-			header("Refresh:2; url=index.php?rt=ucenik");
-			$succesVar="successful. :)";
-
+		if($db == null){
+			echo $_POST["oib"];
+			echo " tog usera nema";
+			$succesVar="unsuccessful. :(";
+			session_destroy();
+			header("Refresh:2; url=index.php?rt=start");
+		}
+		elseif($db->ime == $_POST["ime"]){
+			$succesVar="successful.";
 			$_SESSION["account_type"] = "ucenik";
-			$_SESSION["user_id"]= "iducenik142";
-			$_SESSION["username"]= "username*ucenik";
+			$_SESSION["user_id"]= $db->_id;
+			$_SESSION["user_name"]= $db->ime;
+			$_SESSION["username"]= (string)$db->username;
+			$_SESSION["user_list"]=$db->lista_fakulteta;
+
+			header("Refresh:2; url=index.php?rt=start");
+			
 		}
 		else{
+			echo $db->ime;
 			$succesVar="unsuccessful. :(";
 			session_destroy();
 			header("Refresh:2; url=index.php?rt=start");
 		}
 
+
+		
 		require_once __DIR__ . '/../view/start_login.php';
+		
 	}
 	
 

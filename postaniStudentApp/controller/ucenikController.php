@@ -34,7 +34,7 @@ class UcenikController
         $activeInd=0;
 
 
-        $ucenikName="Mateo";
+        $ucenikName=$_SESSION["user_name"];
         $activeInd=0;
 
         $USERTYPE=$this->USERTYPE;
@@ -49,10 +49,14 @@ class UcenikController
 
         $m= new MongoService();
 
-        $list=$m->returnUcenikWithId("60b6d0a2b000b1fc8a909a6f");
+        $user=$m->returnUcenikWithUsername($_SESSION["username"]);
 
+        $natjecanja=$user->drzavna_natjecanja[0];
 
-        $ucenikName="Mateo";
+        $ocjene=$user->ocjene[0];
+        
+
+        $ucenikName=$_SESSION["user_name"];
         $activeInd=1;
         
         $USERTYPE=$this->USERTYPE;
@@ -60,18 +64,94 @@ class UcenikController
 
 	}
 
+
+    private function getStudentsList($student,$list){
+        $faksevi=array(); 
+        foreach($student->lista_fakulteta_nova as $faksOIB)
+            foreach($list as $faks)
+                if((string)$faks->oib == (string)$faksOIB)
+                    $faksevi[]=$faks;
+
+        return $faksevi;
+    }
+
+
+    public function myListPushUp($index){
+        session_start();
+        $this->checkPrivilege();
+        $m= new MongoService();
+
+        $student=$m->returnUcenikWithId($_SESSION["user_id"]);
+
+        $lista= $student->lista_fakulteta_nova;
+
+
+        $m->pushNewListToStudentWithId($_SESSION["user_id"],$lista,$index,"UP");
+
+
+        header( 'Location: index.php?rt=ucenik/myList');
+		exit();
+    }
+    public function myListPushDown($index){
+        session_start();
+        $this->checkPrivilege();
+        $m= new MongoService();
+
+        $student=$m->returnUcenikWithId($_SESSION["user_id"]);
+
+        $lista= $student->lista_fakulteta_nova;
+
+        $m->pushNewListToStudentWithId($_SESSION["user_id"],$lista,$index,"DOWN");
+
+        header( 'Location: index.php?rt=ucenik/myList');
+		exit();
+    }
+
+    public function myListInsert($faksOib){
+        session_start();
+        $this->checkPrivilege();
+        $m= new MongoService();
+
+        $student=$m->returnUcenikWithId($_SESSION["user_id"]);
+
+        $lista= $student->lista_fakulteta_nova;
+
+        $m->pushNewListToStudentWithId($_SESSION["user_id"],$lista,-1,"INS",(string)$faksOib);
+
+        header( 'Location: index.php?rt=ucenik/browser');
+		exit();
+    }
+
+    public function myListDelete($index){
+        session_start();
+        $this->checkPrivilege();
+        $m= new MongoService();
+
+        $student=$m->returnUcenikWithId($_SESSION["user_id"]);
+
+        $lista= $student->lista_fakulteta_nova;
+
+        $m->pushNewListToStudentWithId($_SESSION["user_id"],$lista,$index,"DEL");
+
+        header( 'Location: index.php?rt=ucenik/myList');
+		exit();
+    }
+
+
     public function myList() {  //LISTA UCENIK -> FAKULTETI
 		session_start();
         $this->checkPrivilege();
-        $ps=new ProductService();
-        $us=new UserService();
        
         $m= new MongoService();
 
-        $list=$m->returnUcenikWithId("60b6d0a2b000b1fc8a909a6f");
+        $student=$m->returnUcenikWithId($_SESSION["user_id"]);
+        $list=$m->returnAllFaks();
 
-        $ucenikName="Mateo";
+        $new_list=$this->getStudentsList($student,$list);
+
+        $ucenikName=$_SESSION["user_name"];
         $activeInd=2;
+
         
         $USERTYPE=$this->USERTYPE;
         require_once __DIR__ . '/../view/'.$USERTYPE.'/myList.php';    
@@ -86,13 +166,13 @@ class UcenikController
        
         $m= new MongoService();
 
-        $list=$m->returnAllFaks("60b6c0a9347c4f9454712c79");
+        $list=$m->returnAllFaks();
 
-        //$result=$m->returnAllFaks();
-        
-        
+        $user=$m->returnUcenikWithUsername($_SESSION["username"]);
+        $listaFaksevaUcenika=$user->lista_fakulteta_nova;
 
-        $ucenikName="Mateo";
+
+        $ucenikName=$_SESSION["user_name"];
         $activeInd=3;
         
         $USERTYPE=$this->USERTYPE;
@@ -108,7 +188,7 @@ class UcenikController
        
 
 
-        $ucenikName="Mateo";
+        $ucenikName=$_SESSION["user_name"];
         $activeInd=4;
         
         $USERTYPE=$this->USERTYPE;
@@ -122,9 +202,7 @@ class UcenikController
         $ps=new ProductService();
         $us=new UserService();
        
-
-
-        $ucenikName="Mateo";
+        $ucenikName=$_SESSION["user_name"];
         $activeInd=5;
         
         $USERTYPE=$this->USERTYPE;
@@ -139,8 +217,6 @@ class UcenikController
 		$this->checkPrivilege();
         $title = 'Store - Add new product';
 		$activeInd=6;
-
-		
 
 		require_once __DIR__ . '/../view/main_add.php';
 		require_once __DIR__ . '/../view/_footer.php';
@@ -158,10 +234,7 @@ class UcenikController
 		header( 'Location: index.php?rt=main/history' );
     	exit();
 
-
 	}
-
-
 
 	public function addResult() { 
 		session_start();
@@ -178,9 +251,6 @@ class UcenikController
 		header( 'Location: index.php?rt=main' );
     	exit();
 	}
-
-
-
 
 	public function history() {
 		session_start();
@@ -211,9 +281,6 @@ class UcenikController
         require_once __DIR__ . '/../view/main_index.php';
         require_once __DIR__ . '/../view/_footer.php';
     }
-
-
-
 
 
 };
