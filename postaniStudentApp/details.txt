@@ -1,0 +1,61 @@
+VARIJABLA                TIP                OPIS
+
+_id:                     ObjectID(***)      JEDINSTVEN
+oib:                     STRING             JEDINSTVEN
+
+...još fali ime,mail...
+
+ocjene:                  Object
+       ime_ocjene1:      STRING             npr. "5"
+       ime_ocjene2:      STRING             npr. "5"
+       ...
+       izborni:          STRING            ime izbornog predmeta
+       izb_oc:           STRING(broj)      value izb predmeta ,npr. "5"
+
+izbori:                  ARRAY             array OIBova fakseva
+       string1           STRING
+       string2           STRING
+       ...
+
+
+natjecanje:              Object
+       naziv:            STRING            ime predmeta         
+       mjesto:           STRING            npr. "1" 
+
+
+
+TO DO:
+---------------------------------------------------------------
+
+natjecanje:              Object
+       naziv:            STRING            ime predmeta         
+       mjesto:           STRING            npr. "1" 
+       
+natjecanje:              Array
+       Object                           <-  naziv:...
+                                            mjesto:...
+       Object                           <-  naziv:...
+                                            mjesto:...
+
+
+
+
+
+ocjene:                  Object
+       ime_ocjene1:      STRING             npr. "5"
+       ime_ocjene2:      STRING             npr. "5"
+       ...
+       izborni:          STRING            ime izbornog predmeta
+       izb_oc:           STRING(broj)      value izb predmeta ,npr. "5"
+
+
+ocjene:                  Object
+       ime_ocjene1:      STRING             npr. "5"
+       ime_ocjene2:      STRING             npr. "5"
+       ...
+       izborni:          Object            
+             ime_ocjene1:      STRING           
+             ime_ocjene2:      STRING
+             ime_ocjene3:      STRING
+                               
+           

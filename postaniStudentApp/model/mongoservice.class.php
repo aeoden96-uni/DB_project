@@ -48,6 +48,18 @@ class MongoService
             
     }
 
+    function changeUcenikWithId($userId,$atribut, $vrijednost){
+        $db = DB2::getConnection(); 
+        $bulk = new MongoDB\Driver\BulkWrite;
+        $bulk->update(
+            ['_id' => $userId],
+            ['$set' => [$atribut => $vrijednost  ]],
+            ['multi' => false, 'upsert' => false]
+        );
+
+        $result = $db->executeBulkWrite("project.studenti",$bulk); 
+    }
+
     function queryAll($kolekcija){
         $db = DB2::getConnection(); 
 
@@ -133,29 +145,110 @@ class MongoService
         
 
 
-/*[{$match: {
-  _id:"60b9f9d265b6b6dbd1ea3a48"
-}}, {$unwind: {
-  path: "$lista_fakulteta_nova",
-  includeArrayIndex: 'redniBroj'
-}}, {$lookup: {
-  from: 'fakulteti',
-  localField: 'lista_fakulteta_nova',
-  foreignField: 'oib',
-  as: 'fakultetInfo'
-}}, {$sort: {
-  "redniBroj": 1
-}}, {$group: {
-  _id: "60b9f9d265b6b6dbd1ea3a48",
-  fieldN: {
-    $push: {faks:"$fakultetInfo"}
-  }
-}}] */
 
 
     }
 
+    public function startAggreagtion(){
+        echo "you initiated aggregation procedure.";
 
+
+        $db = DB2::getConnection(); 
+
+
+
+        $command = new MongoDB\Driver\Command([
+            'aggregate' => 'fakultet',
+            'pipeline' => [
+                /**{$match: {  "oibf": "1f" }}, */
+                ['$match' => ['oibf' => '1f']],
+
+                /**{$lookup: { from: "student",
+                    localField:  "oibf",  	
+                    foreignField:"izbori", 
+                    as: "lista" }}, 
+             */
+                ['$lookup' => ['from' => 'student','localField' => 'oibf','foreignField'=> 'izbori', 'as'=> 'lista']],   
+                
+                /**{$unwind: {
+			path: "$lista"}},  */
+
+                ['$unwind' => ['path' => '$lista']],
+
+                ['$unwind' => ['path' => '$uvjeti']],
+
+                
+                ['$project' => ['_id' => '$lista.oib', 
+                            'zbrojG' => [ '$sum' => [
+                                [ '$multiply' =>  [['$toInt' => '$lista.ocjene.m'], ['$toInt' => '$uvjeti.m']] ],
+                                [ '$multiply' =>  [['$toInt' => '$lista.ocjene.h'], ['$toInt' => '$uvjeti.h']] ],
+                                ['$multiply' =>  [['$toInt' => '$lista.ocjene.e'],['$toInt' => '$uvjeti.e']] ]
+                                ]  ],
+                                
+                            'zbrojN' =>  ['$cond' => [
+                                           'if' => [ 
+                                                '$and' => [
+                                                    '$eq' => ['$lista.natjecanje.naziv', '$uvjeti.natjecanje'],
+                                                    '$eq' => ['$lista.natjecanje.mjesto', '1']
+
+                                                ]
+
+                                            ],
+                                            'then'=> 1000,
+
+                                            'else' => [
+                                                    '$cond' => [
+                                                        'if' => [ '$eq' => ['$lista.natjecanje.naziv', '$uvjeti.natjecanje'] ],
+                                                        'then'=>10,
+                                                        'else'=>0  ]
+                                            ]
+                                       ]
+                            
+                            
+                            ],
+                            
+                            'zbrojI'  =>  [
+
+                                '$cond' =>  ['if' =>  [ '$eq' =>  ['$lista.ocjene.izborni', '$uvjeti.izborni']] ,
+                                     'then' =>  [ '$multiply' =>  [['$toInt' => '$lista.ocjene.izb_oc'], 6]],
+                                     'else' =>  0
+                 
+                                       ]
+                                 ]	,   
+                             'izbor' => ['$indexOfArray' =>  [ '$lista.izbori', '$oibf' ] ]
+
+
+
+                            
+                            
+                            ]],
+        ['$set' =>  [
+            'zbroj' =>  [
+                '$sum' =>  ['$zbrojG','$zbrojN','$zbrojI']
+            ]
+            
+            ]], 
+            
+            ['$sort' =>  [
+            'zbroj' =>  -1
+            ]]
+
+            ],
+            'cursor' => new stdClass,
+        ]);
+
+        $result=$db->executeCommand('vjezba', $command)->toArray();
+
+
+        var_dump($result);
+
+    }
+
+    public function resetAggreagtion(){
+        echo "you initiated aggregation RESET procedure.";
+    }
 
 }
+
+
 ?>

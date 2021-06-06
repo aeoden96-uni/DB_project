@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../model/userservice.class.php';
 require_once __DIR__ . '../../model/product.class.php'; 
 require_once __DIR__ . '/../model/productservice.class.php';
+require_once __DIR__ . '/../model/mongoservice.class.php';
 
 
 
@@ -48,7 +49,11 @@ class AdminController
         $ucenikName=$_SESSION["username"];
         $USERTYPE=$this->USERTYPE;
 
-        echo "you initiated aggregation procedure.";
+        $m= new MongoService();
+
+        $m->startAggreagtion();
+
+        
         //require_once __DIR__ . '/../view/'.$USERTYPE.'/index.php';   
 
 	}
@@ -59,7 +64,12 @@ class AdminController
         $ucenikName=$_SESSION["username"];
         $USERTYPE=$this->USERTYPE;
 
-        echo "you initiated aggregation RESET procedure.";
+        $m= new MongoService();
+
+        $m->resetAggreagtion();
+
+
+        
         //require_once __DIR__ . '/../view/'.$USERTYPE.'/index.php';   
 
 	}

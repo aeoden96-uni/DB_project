@@ -69,76 +69,45 @@ my-4 = MARGIN top bottom
             <h5 class="card-header">Your current faculty list</h5>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col">OIB</th>
-                            <th scope="col">Prefference</th>
-                            <th scope="col">Faculty name</th>
-                            <th scope="col">Total score</th>
-                            <th scope="col">Requirements met</th>
-                            <th scope="col"></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <th scope="row">17371705</th>
-                            <td>Volt Premium Bootstrap 5 Dashboard</td>
-                            <td>johndoe@gmail.com</td>
-                            <td>€61.11</td>
-                            <td>Aug 31 2020</td>
-                            <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
-                          </tr>
-                          <tr>
-                            <th scope="row">17370540</th>
-                            <td>Pixel Pro Premium Bootstrap UI Kit</td>
-                            <td>jacob.monroe@company.com</td>
-                            <td>$153.11</td>
-                            <td>Aug 28 2020</td>
-                            <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
-                          </tr>
-                          <tr>
-                            <th scope="row">17371705</th>
-                            <td>Volt Premium Bootstrap 5 Dashboard</td>
-                            <td>johndoe@gmail.com</td>
-                            <td>€61.11</td>
-                            <td>Aug 31 2020</td>
-                            <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
-                          </tr>
-                          <tr>
-                            <th scope="row">17370540</th>
-                            <td>Pixel Pro Premium Bootstrap UI Kit</td>
-                            <td>jacob.monroe@company.com</td>
-                            <td>$153.11</td>
-                            <td>Aug 28 2020</td>
-                            <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
-                          </tr>
-                          <tr>
-                            <th scope="row">17371705</th>
-                            <td>Volt Premium Bootstrap 5 Dashboard</td>
-                            <td>johndoe@gmail.com</td>
-                            <td>€61.11</td>
-                            <td>Aug 31 2020</td>
-                            <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
-                          </tr>
-                          <tr>
-                            <th scope="row">17370540</th>
-                            <td>Pixel Pro Premium Bootstrap UI Kit</td>
-                            <td>jacob.monroe@company.com</td>
-                            <td>$153.11</td>
-                            <td>Aug 28 2020</td>
-                            <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
-                          </tr>
-                        </tbody>
-                      </table>
+                <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">Prefference</th>
+                    <th scope="col">Faculty name</th>
+                    <th scope="col">OIB</th>
+                    <th scope="col">Quota</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $redBr=0;
+                    if ($new_list != null)
+                        foreach($new_list as $faks){
+                            
+                            $faks=$faks[0];
+                            
+                            echo 
+                            '<tr>'.
+                                '<th scope="row">'.($redBr+1) .'</th>'. 
+                                '<td>'.$faks->naziv .'</td>'. 
+                                '<td>'.$faks->oib .'</td>'.
+                                '<td>'.$faks->kvota .'</td>'.
+                               
+                            '</tr>';
+                            $redBr+=1;
+                        }
+                    ?>
+                   
+                </tbody>
+                </table>
                 </div>
-                <a href="index.php?rt=ucenik/popis" class="btn btn-block btn-light">View all</a>
+                <a href="index.php?rt=ucenik/myList" class="btn btn-block btn-light">View all</a>
             </div>
         </div>
     </div>
     <div class="col-12 col-xl-4">
         <div class="card">
-            <h5 class="card-header">Traffic last 6 months</h5>
+            <h5 class="card-header">Faculty chart</h5>
             <div class="card-body">
             <iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="100%" height="300px"  src="https://charts.mongodb.com/charts-project-nbp-vmmqp/embed/charts?id=93ce6b26-32f3-4096-94b1-a4f6e9b94afe&theme=light"></iframe>
             </div>

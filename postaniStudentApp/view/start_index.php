@@ -55,21 +55,17 @@ function yesno(thecheckbox, thelabel,checkbox_conditions) {
 
 		<hr>
 		<form action="index.php?rt=start/loginCheckUcenik" method="post">
-			<div class="form-check form-switch">
+			<!--<div class="form-check form-switch">
 			  <input onclick="yesno('korisnik_checkbox','korisnik_checkbox_label','korisnik_uvjeti');" class="form-check-input" type="checkbox" name="korisnik_checkbox"  id="korisnik_checkbox">
 			  <label name="korisnik_checkbox_label" style="margin-bottom:10px;" class="form-check-label" id="korisnik_checkbox_label" for="korisnik_checkbox">Već imam račun</label>
-			</div>
+			</div>-->
 			<div class="form-group">
 				<input style="margin-bottom:10px;" name="oib" class="form-control" value="69984765783" placeholder="OIB" >
 				
 				<input style="margin-bottom:10px;"  name="ime" class="form-control" value="Ivan" placeholder="******" type="password">
-				<input type="checkbox" id="korisnik_uvjeti">
-				<label name="korisnik_checkbox_label" style="margin-bottom:10px;" class="form-check-label" id="korisnik_uvjeti_label" for="korisnik_checkbox"> Prihvaćam uvjete i politiku privatnosti</label>
-				<br>
+			
 				<button type="submit" class="btn btn-primary btn-block"> Prijava  </button>
-				<div class="col-md-6 text-right">
-					<a class="small" href="#">Forgot password?</a>
-				</div>  
+				
 				
 			</div> <!-- form-group// -->  
 					
@@ -89,19 +85,14 @@ function yesno(thecheckbox, thelabel,checkbox_conditions) {
 
 		<hr>
 		<form action="index.php?rt=start/loginCheckFaks" method="post">
-			<div class="form-check form-switch">
-			  <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-			  <label style="margin-bottom:10px;" class="form-check-label" for="flexSwitchCheckDefault">Još nemam račun</label>
-			</div>
+			
 			<div class="form-group">
 				<input style="margin-bottom:10px;" name="" class="form-control" placeholder="OIB" type="email">
 				
 				<input style="margin-bottom:10px;" class="form-control" placeholder="******" type="password">
 				
 				<button type="submit" class="btn btn-primary btn-block"> Prijava  </button>
-				<div class="col-md-6 text-right">
-					<a class="small" href="#">Forgot password?</a>
-				</div>                                    
+				                                
 			</div> <!-- form-group// -->  
 					
 			                                                            
@@ -120,19 +111,14 @@ function yesno(thecheckbox, thelabel,checkbox_conditions) {
 
 		<hr>
 		<form action="index.php?rt=start/loginCheckAdmin" method="post">
-			<div class="form-check form-switch">
-			  <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-			  <label style="margin-bottom:10px;" class="form-check-label" for="flexSwitchCheckDefault">Još nemam račun</label>
-			</div>
+			
 			<div class="form-group">
 				<input style="margin-bottom:10px;" name="" class="form-control" placeholder="korisnicko ime" type="email">
 				
 				<input style="margin-bottom:10px;" class="form-control" placeholder="******" type="password">
 				
 				<button type="submit" class="btn btn-primary btn-block"> Prijava  </button>
-				<div class="col-md-6 text-right">
-					<a class="small" href="#">Forgot password?</a>
-				</div>                                    
+				                                   
 			</div> <!-- form-group// -->  
 					
 			                                                            

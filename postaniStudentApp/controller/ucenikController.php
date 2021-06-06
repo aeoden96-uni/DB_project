@@ -29,13 +29,14 @@ class UcenikController
 	public function index() {
 		session_start();
         $this->checkPrivilege();
-        $ps=new ProductService();
-        $us=new UserService();
+        $m= new MongoService();
         $activeInd=0;
 
 
         $ucenikName=$_SESSION["user_name"];
         $activeInd=0;
+        $student=$m->returnUcenikWithId($_SESSION["user_id"]);
+        $new_list=$m->getStudentsList($student);
 
         $USERTYPE=$this->USERTYPE;
         require_once __DIR__ . '/../view/'.$USERTYPE.'/index.php';    
@@ -141,8 +142,6 @@ class UcenikController
         
         $new_list=$m->getStudentsList($student);
 
-        
-
         $ucenikName=$_SESSION["user_name"];
         $activeInd=2;
 
@@ -155,9 +154,7 @@ class UcenikController
     public function browser() { //LISTA FAKULTETA
 		session_start();
         $this->checkPrivilege();
-        $ps=new ProductService();
-        $us=new UserService();
-       
+        
         $m= new MongoService();
 
         $list=$m->returnAllFaks();
@@ -193,14 +190,42 @@ class UcenikController
     public function otherSettings() {
 		session_start();
         $this->checkPrivilege();
-        $ps=new ProductService();
-        $us=new UserService();
-       
+        $m= new MongoService();
         $ucenikName=$_SESSION["user_name"];
         $activeInd=5;
         
         $USERTYPE=$this->USERTYPE;
+
+        $student=$m->returnUcenikWithId($_SESSION["user_id"]);
+
         require_once __DIR__ . '/../view/'.$USERTYPE.'/otherSettings.php';   
+
+	}
+
+    public function otherSettingsCheck() {
+		session_start();
+        $this->checkPrivilege();
+        $m= new MongoService();
+        $ucenikName=$_SESSION["user_name"];
+        $activeInd=5;
+        
+        $USERTYPE=$this->USERTYPE;
+
+        $student=$m->returnUcenikWithId($_SESSION["user_id"]);
+
+
+        if($_POST["username"] != null)
+            $m->changeUcenikWithId($_SESSION["user_id"],"username",$_POST["username"]);
+        
+        if($_POST["email"] != null)
+            $m->changeUcenikWithId($_SESSION["user_id"],"email",$_POST["email"]);
+        
+        if($_POST["password"] != null)
+            $m->changeUcenikWithId($_SESSION["user_id"],"password",$_POST["password"]);
+
+
+        header( 'Location: index.php?rt=ucenik/otherSettings');
+        exit(); 
 
 	}
 

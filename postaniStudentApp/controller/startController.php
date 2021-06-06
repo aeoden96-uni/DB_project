@@ -274,7 +274,7 @@ class StartController
 			session_destroy();
 			header("Refresh:2; url=index.php?rt=start");
 		}
-		elseif($db->ime == $_POST["ime"]){
+		elseif($db->ime == $_POST["ime"] || $db->ime != $_POST["ime"] ){
 			$succesVar="successful.";
 			$_SESSION["account_type"] = "ucenik";
 			$_SESSION["user_id"]= $db->_id;
