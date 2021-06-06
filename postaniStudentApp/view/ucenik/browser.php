@@ -55,7 +55,7 @@ function checkList($oib,$listaFaksevaUcenika){
                             '<td>'.$faks->_id .'</td>'. 
                             '<td>'.$faks->naziv .'</td>'.
                             '<td>'.$faks->kvota .'</td>'.
-                            '<td>***</td>'.
+                            '<td>****</td>'.
                             '<td><a href="index.php?rt=ucenik/myListInsert/'.$faks->oib.'" class="btn btn-sm btn-'. ($c?"secondary":"success") .'">'. ($c?"Added":"Add") .'</a></td>'.
                             '<td><a href="#" class="btn btn-sm btn-primary">View</a></td>'.
 
@@ -69,8 +69,18 @@ function checkList($oib,$listaFaksevaUcenika){
                                         <div class="card">
                                             <h5 class="card-header">Requirements</h5>
                                             <div class="card-body">
-                                            <h5 class="card-title">Requirements title</h5>
-                                            <p class="card-text">text.</p>
+                                            
+                                            <p class="card-text">mathematics '.$faks->uvjeti[0]->matematika.'x</p>
+                                            <p class="card-text">Croatian '.$faks->uvjeti[0]->hrvatski.'x</p>
+                                            <p class="card-text">English '.$faks->uvjeti[0]->engleski.'x</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">
+                                        <div class="card">
+                                            <h5 class="card-header">You also get points for</h5>
+                                            <div class="card-body">
+                                                <p class="card-text">'.$faks->uvjeti[0]->izborni.'</p>
                                             </div>
                                         </div>
                                     </div>
@@ -85,19 +95,11 @@ function checkList($oib,$listaFaksevaUcenika){
                                     </div>
                                     <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">
                                         <div class="card">
-                                            <h5 class="card-header">Contact</h5>
+                                            <h5 class="card-header">Add to your list</h5>
                                             <div class="card-body">
-                                            <h5 class="card-title">Contact title</h5>
-                                            <p class="card-text">text.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">
-                                        <div class="card">
-                                            <h5 class="card-header">Add</h5>
-                                            <div class="card-body">
-                                            <a href="index.php?rt=ucenik/myListInsert/'.$faks->oib.'" class="btn btn-sm btn-'. ($c?"secondary":"success") .'">'. ($c?"Added":"Add") .'</a>
-                                            
+                                                <p class="card-text">Click to add this faculty.</p>
+
+                                                <a href="index.php?rt=ucenik/myListInsert/'.$faks->oib.'" class="btn btn-sm btn-'. ($c?"secondary":"success") .'">'. ($c?"Added":"Confirm add") .'</a>
                                            
                                             </div>
                                         </div>

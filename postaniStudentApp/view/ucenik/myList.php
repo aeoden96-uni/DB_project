@@ -12,10 +12,14 @@ function addButtons($id){
 }
 
 function addFirstButtons($id){
-    
+    if($id==0)
+        return '<div class="btn-group mr-2" role="group" aria-label="Second group">'.
+                '<a type="button" href="index.php?rt=ucenik/myListPushDown/' . $id . '" class="btn btn-secondary">▼</a>'.
+            '</div>';
     return '<div class="btn-group mr-2" role="group" aria-label="Second group">'.
-            '<a type="button" href="index.php?rt=ucenik/myListPushDown/' . $id . '" class="btn btn-secondary">▼</a>'.
-        '</div>';
+    '<a type="button" href="index.php?rt=ucenik/myListPushUp/' . $id . '" class="btn btn-secondary">▲</a>'.
+    '</div>';
+    
 
 }
 
@@ -54,21 +58,22 @@ function addFirstButtons($id){
                 <tbody>
                     <?php
                     $redBr=0;
-                    foreach($new_list as $faks){
-                        
-                        
-                        
-                        echo 
-                        '<tr>'.
-                            '<th scope="row">'.($redBr+1) .'</th>'. 
-                            '<td>'.$faks->naziv .'</td>'. 
-                            '<td>'.$faks->oib .'</td>'.
-                            '<td>'.$faks->kvota .'</td>'.
-                            '<td>'.(($redBr==0)? addFirstButtons($redBr ):addButtons($redBr )).'</td>'.
-                            '<td><a href="index.php?rt=ucenik/myListDelete/'.$redBr .'" class="btn btn-sm btn-warning">Remove</a></td>'.
-                        '</tr>';
-                        $redBr+=1;
-                    }
+                    if ($new_list != null)
+                        foreach($new_list as $faks){
+                            
+                            $faks=$faks[0];
+                            
+                            echo 
+                            '<tr>'.
+                                '<th scope="row">'.($redBr+1) .'</th>'. 
+                                '<td>'.$faks->naziv .'</td>'. 
+                                '<td>'.$faks->oib .'</td>'.
+                                '<td>'.$faks->kvota .'</td>'.
+                                '<td>'.(($redBr==0 || $redBr==count($new_list)-1)? addFirstButtons($redBr ):addButtons($redBr )).'</td>'.
+                                '<td><a href="index.php?rt=ucenik/myListDelete/'.$redBr .'" class="btn btn-sm btn-warning">Remove</a></td>'.
+                            '</tr>';
+                            $redBr+=1;
+                        }
                     ?>
                    
                 </tbody>

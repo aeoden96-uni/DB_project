@@ -68,71 +68,7 @@ my-4 = MARGIN top bottom
         <div class="card">
             <h5 class="card-header">Your current faculty list</h5>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col">OIB</th>
-                            <th scope="col">Prefference</th>
-                            <th scope="col">Faculty name</th>
-                            <th scope="col">Total score</th>
-                            <th scope="col">Requirements met</th>
-                            <th scope="col"></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <th scope="row">17371705</th>
-                            <td>Volt Premium Bootstrap 5 Dashboard</td>
-                            <td>johndoe@gmail.com</td>
-                            <td>€61.11</td>
-                            <td>Aug 31 2020</td>
-                            <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
-                          </tr>
-                          <tr>
-                            <th scope="row">17370540</th>
-                            <td>Pixel Pro Premium Bootstrap UI Kit</td>
-                            <td>jacob.monroe@company.com</td>
-                            <td>$153.11</td>
-                            <td>Aug 28 2020</td>
-                            <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
-                          </tr>
-                          <tr>
-                            <th scope="row">17371705</th>
-                            <td>Volt Premium Bootstrap 5 Dashboard</td>
-                            <td>johndoe@gmail.com</td>
-                            <td>€61.11</td>
-                            <td>Aug 31 2020</td>
-                            <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
-                          </tr>
-                          <tr>
-                            <th scope="row">17370540</th>
-                            <td>Pixel Pro Premium Bootstrap UI Kit</td>
-                            <td>jacob.monroe@company.com</td>
-                            <td>$153.11</td>
-                            <td>Aug 28 2020</td>
-                            <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
-                          </tr>
-                          <tr>
-                            <th scope="row">17371705</th>
-                            <td>Volt Premium Bootstrap 5 Dashboard</td>
-                            <td>johndoe@gmail.com</td>
-                            <td>€61.11</td>
-                            <td>Aug 31 2020</td>
-                            <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
-                          </tr>
-                          <tr>
-                            <th scope="row">17370540</th>
-                            <td>Pixel Pro Premium Bootstrap UI Kit</td>
-                            <td>jacob.monroe@company.com</td>
-                            <td>$153.11</td>
-                            <td>Aug 28 2020</td>
-                            <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                </div>
-                <a href="index.php?rt=faks/popis" class="btn btn-block btn-light">View all</a>
+            <iframe style="background: #21313C;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="640" height="480" src="https://charts.mongodb.com/charts-project-nbp-vmmqp/embed/charts?id=caa20678-1c79-4188-97ad-ec223964cf49&theme=dark"></iframe>
             </div>
         </div>
     </div>
@@ -145,20 +81,7 @@ my-4 = MARGIN top bottom
         </div>
     </div>
 </div>
-<footer class="pt-5 d-flex justify-content-between">
-    <span>Copyright © 2019-2020 <a href="https://themesberg.com">Themesberg</a></span>
-    <ul class="nav m-0">
-        <li class="nav-item">
-          <a class="nav-link text-secondary" aria-current="page" href="#">Privacy Policy</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-secondary" href="#">Terms and conditions</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-secondary" href="#">Contact</a>
-        </li>
-      </ul>
-</footer>
+
       
 
 

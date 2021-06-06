@@ -140,7 +140,7 @@ my-4 = MARGIN top bottom
         <div class="card">
             <h5 class="card-header">Traffic last 6 months</h5>
             <div class="card-body">
-                <div id="traffic-chart"></div>
+            <iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="100%" height="300px"  src="https://charts.mongodb.com/charts-project-nbp-vmmqp/embed/charts?id=93ce6b26-32f3-4096-94b1-a4f6e9b94afe&theme=light"></iframe>
             </div>
         </div>
     </div>
@@ -149,20 +149,7 @@ my-4 = MARGIN top bottom
 
 
 
-<footer class="pt-5 d-flex justify-content-between">
-    <span>Copyright © 2019-2020 <a href="https://themesberg.com">Themesberg</a></span>
-    <ul class="nav m-0">
-        <li class="nav-item">
-          <a class="nav-link text-secondary" aria-current="page" href="#">Privacy Policy</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-secondary" href="#">Terms and conditions</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-secondary" href="#">Contact</a>
-        </li>
-      </ul>
-</footer>
+
       
 
 

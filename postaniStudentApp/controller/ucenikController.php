@@ -65,16 +65,6 @@ class UcenikController
 	}
 
 
-    private function getStudentsList($student,$list){
-        $faksevi=array(); 
-        foreach($student->lista_fakulteta_nova as $faksOIB)
-            foreach($list as $faks)
-                if((string)$faks->oib == (string)$faksOIB)
-                    $faksevi[]=$faks;
-
-        return $faksevi;
-    }
-
 
     public function myListPushUp($index){
         session_start();
@@ -88,7 +78,7 @@ class UcenikController
 
         $m->pushNewListToStudentWithId($_SESSION["user_id"],$lista,$index,"UP");
 
-
+        //echo "<script>console.log(".$lista.");</script>";
         header( 'Location: index.php?rt=ucenik/myList');
 		exit();
     }
@@ -115,6 +105,9 @@ class UcenikController
         $student=$m->returnUcenikWithId($_SESSION["user_id"]);
 
         $lista= $student->lista_fakulteta_nova;
+
+        echo ($faksOib);
+        echo gettype($faksOib);
 
         $m->pushNewListToStudentWithId($_SESSION["user_id"],$lista,-1,"INS",(string)$faksOib);
 
@@ -145,15 +138,16 @@ class UcenikController
         $m= new MongoService();
 
         $student=$m->returnUcenikWithId($_SESSION["user_id"]);
-        $list=$m->returnAllFaks();
+        
+        $new_list=$m->getStudentsList($student);
 
-        $new_list=$this->getStudentsList($student,$list);
+        
 
         $ucenikName=$_SESSION["user_name"];
         $activeInd=2;
 
-        
         $USERTYPE=$this->USERTYPE;
+
         require_once __DIR__ . '/../view/'.$USERTYPE.'/myList.php';    
 
 	}

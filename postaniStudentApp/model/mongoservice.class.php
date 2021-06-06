@@ -58,7 +58,9 @@ class MongoService
 
     function pushNewListToStudentWithId($userId,$lista,$index,$action="UP",$newElement=null){
         $db = DB2::getConnection(); 
-        echo $userId;
+        
+        //echo $userId;
+        //var_dump($lista);
 
         switch($action){
             case "UP":
@@ -75,7 +77,9 @@ class MongoService
                 break;
 
             case "DEL":
-                $lista=array_diff($lista, array((string)$lista[$index]));
+                unset($lista[$index]);
+                $lista = array_values($lista);
+                
                 
                 break;
             case "INS":
@@ -83,6 +87,10 @@ class MongoService
                 
                 break;
         }
+        
+
+        //var_dump($lista);
+        //var_dump($lista);
 
         $bulk = new MongoDB\Driver\BulkWrite;
         $bulk->update(
@@ -94,11 +102,60 @@ class MongoService
         $result = $db->executeBulkWrite("project.studenti",$bulk); 
                 
 
+    }
+
+    public function getStudentsList($student){
+        //vraca listu objekata fakulteti s OIBovima koji pisu u ucenikovoj listi izbora
+        //NE VRACA ISTIM REDOSLIJEDOM
+        $db = DB2::getConnection(); 
+
+
+
+        $command = new MongoDB\Driver\Command([
+            'aggregate' => 'studenti',
+            'pipeline' => [
+                ['$match' => ['_id' => '60b9f9d265b6b6dbd1ea3a48']],
+                ['$unwind' => ['path' => '$lista_fakulteta_nova','includeArrayIndex' => 'redniBroj']],
+
+                ['$lookup' => ['from' => 'fakulteti','localField' => 'lista_fakulteta_nova','foreignField'=> 'oib', 'as'=> 'fakultetInfo']],
+                ['$sort' => ['redniBroj'=> 1]],
+                ['$group' => ['_id' => '60b9f9d265b6b6dbd1ea3a48', 'fieldN' => [ '$push' => '$fakultetInfo'  ]]]
+
+            ],
+            'cursor' => new stdClass,
+        ]);
+
+        $result=$db->executeCommand('project', $command)->toArray();
+
+        if ($result==null) return null;
+
+        return  $result[0]->fieldN;
+        
+
+
+/*[{$match: {
+  _id:"60b9f9d265b6b6dbd1ea3a48"
+}}, {$unwind: {
+  path: "$lista_fakulteta_nova",
+  includeArrayIndex: 'redniBroj'
+}}, {$lookup: {
+  from: 'fakulteti',
+  localField: 'lista_fakulteta_nova',
+  foreignField: 'oib',
+  as: 'fakultetInfo'
+}}, {$sort: {
+  "redniBroj": 1
+}}, {$group: {
+  _id: "60b9f9d265b6b6dbd1ea3a48",
+  fieldN: {
+    $push: {faks:"$fakultetInfo"}
+  }
+}}] */
 
 
     }
 
 
-    
+
 }
 ?>

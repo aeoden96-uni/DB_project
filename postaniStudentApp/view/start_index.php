@@ -41,7 +41,7 @@ function yesno(thecheckbox, thelabel,checkbox_conditions) {
 
 
 <div class="container">
-	<br>  <p class="text-center">Postani student</p>
+	<br>  <h3 class="text-center">Postani student<sup>2.0</sup></h3>
 	<hr>
 
 	<div class="row">
@@ -147,7 +147,9 @@ function yesno(thecheckbox, thelabel,checkbox_conditions) {
 <!--container end.//-->
 
 <br><br><br>
-<article class="bg-secondary mb-3">  
+
+
+<!--<article class="bg-secondary mb-3">  
 	<div class="card-body text-center">
 		<h4 class="text-white">HTML UI KIT <br> Ready to use Bootstrap 4 components and templates </h4>
 		<p class="h5 text-white"> for Ecommerce, marketplace, booking websites 
@@ -156,7 +158,9 @@ function yesno(thecheckbox, thelabel,checkbox_conditions) {
 		<i class="fa fa-window-restore "></i></a></p>
 	</div>
 	<br><br><br>
-</article>
+</article>-->
+
+
 
 </body>
 </html>

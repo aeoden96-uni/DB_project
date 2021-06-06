@@ -31,18 +31,40 @@ class AdminController
 	public function index() {
 		session_start();
         $this->checkPrivilege();
-        $ps=new ProductService();
-        $us=new UserService();
-        $activeInd=0;
 
-
-        $ucenikName="Admin Name";
+        $ucenikName=$_SESSION["username"];
         $activeInd=0;
         
         $USERTYPE=$this->USERTYPE;
         require_once __DIR__ . '/../view/'.$USERTYPE.'/index.php';   
 
 	}
+
+    
+	public function start() {
+		session_start();
+        $this->checkPrivilege();
+        
+        $ucenikName=$_SESSION["username"];
+        $USERTYPE=$this->USERTYPE;
+
+        echo "you initiated aggregation procedure.";
+        //require_once __DIR__ . '/../view/'.$USERTYPE.'/index.php';   
+
+	}
+	public function reset() {
+		session_start();
+        $this->checkPrivilege();
+        
+        $ucenikName=$_SESSION["username"];
+        $USERTYPE=$this->USERTYPE;
+
+        echo "you initiated aggregation RESET procedure.";
+        //require_once __DIR__ . '/../view/'.$USERTYPE.'/index.php';   
+
+	}
+
+
 }
 
 

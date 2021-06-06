@@ -60,7 +60,7 @@ switch(count($parts)){
 			$con->$action();
 		}
 		else{
-			$con->$action((int)$number);
+			$con->$action((string)$number);
 		}
 		break;
 }
