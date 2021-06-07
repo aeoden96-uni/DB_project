@@ -33,6 +33,12 @@ class MongoService
 
     }
 
+    function returnAdminWithUsername($username){
+        
+        return $this->queryOne( "admini", "admin_username", $username);
+
+    }
+
     function queryOne($kolekcija, $atribut, $vrijednost){
         $db = DB2::getConnection(); 
 

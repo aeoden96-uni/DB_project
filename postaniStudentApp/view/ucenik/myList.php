@@ -73,8 +73,8 @@ function addFirstButtons($id){
                                 '<td>'.$faks->oib .'</td>'.
                                 '<td>'.$faks->kvota .'</td>';
 
-                            if(!$lockBool) echo  '<td>'.(($redBr==0 || $redBr==count($new_list)-1)? addFirstButtons($redBr ):addButtons($redBr )).'</td>'.
-                                '<td><a href="index.php?rt=ucenik/myListDelete/'.$redBr .'" class="btn btn-sm btn-warning">Remove</a></td>';
+                            if(!$lockBool && count($new_list)>1) echo  '<td>'.(($redBr==0 || $redBr==count($new_list)-1)? addFirstButtons($redBr ):addButtons($redBr )).'</td>';
+                            if(!$lockBool) echo  '<td><a href="index.php?rt=ucenik/myListDelete/'.$redBr .'" class="btn btn-sm btn-warning">Remove</a></td>';
                             echo '</tr>';
                             $redBr+=1;
                         }
