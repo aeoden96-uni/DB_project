@@ -1,8 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../model/userservice.class.php';
-require_once __DIR__ . '../../model/product.class.php'; 
-require_once __DIR__ . '/../model/productservice.class.php';
+require_once __DIR__ . '/../model/globalservice.class.php';
 require_once __DIR__ . '/../model/mongoservice.class.php';
 
 
@@ -35,11 +33,50 @@ class AdminController
 
         $ucenikName=$_SESSION["username"];
         $activeInd=0;
+
+
+        $g= new GlobalService();
+    
+        $lockDate= $g->getLockDate();
+        $lockDateString=$lockDate->toDateTime()->format('d.m.Y');
+
+        $resultDate= $g->getResultsDate();
+        $resultDateString=$resultDate->toDateTime()->format('d.m.Y');
+
+        $resultBool= $g->getResultsBool();
+        $lockBool= $g->getLockBool();
+        $agregBool=$g->getAgregBool();
+
+        
+
+
         
         $USERTYPE=$this->USERTYPE;
         require_once __DIR__ . '/../view/'.$USERTYPE.'/index.php';   
 
 	}
+
+    function lockSwitch(){
+        session_start();
+        $this->checkPrivilege();
+        $g= new GlobalService();
+        $g->switchLockBool(!$g->getLockBool());
+        header( 'Location: index.php?rt=admin');
+		exit();
+   
+    }
+
+    function resultsSwitch(){
+        session_start();
+        $this->checkPrivilege();
+        $g= new GlobalService();
+
+        $g->switchResultsBool(!$g->getResultsBool());
+
+        header( 'Location: index.php?rt=admin');
+		exit();
+   
+    }
 
     
 	public function start() {
@@ -48,13 +85,15 @@ class AdminController
         
         $ucenikName=$_SESSION["username"];
         $USERTYPE=$this->USERTYPE;
-
+        $g= new GlobalService();
         $m= new MongoService();
 
-        $m->startAggreagtion();
+        //$m->startAggreagtion();
 
-        
-        //require_once __DIR__ . '/../view/'.$USERTYPE.'/index.php';   
+        $g->switchAgregBool(true);
+
+        header( 'Location: index.php?rt=admin');
+		exit();  
 
 	}
 	public function reset() {
@@ -63,14 +102,15 @@ class AdminController
         
         $ucenikName=$_SESSION["username"];
         $USERTYPE=$this->USERTYPE;
-
+        $g= new GlobalService();
         $m= new MongoService();
 
-        $m->resetAggreagtion();
+        //$m->resetAggreagtion();
 
+        $g->switchAgregBool(false);
 
-        
-        //require_once __DIR__ . '/../view/'.$USERTYPE.'/index.php';   
+        header( 'Location: index.php?rt=admin');
+		exit();
 
 	}
 

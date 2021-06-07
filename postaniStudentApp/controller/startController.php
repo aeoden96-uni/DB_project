@@ -1,8 +1,7 @@
 <?php
 
 
-require_once __DIR__ . '/../model/userservice.class.php';
-require_once __DIR__ . '/../model/user.class.php';
+
 
 require_once __DIR__ . '/../model/mongoservice.class.php';
 
