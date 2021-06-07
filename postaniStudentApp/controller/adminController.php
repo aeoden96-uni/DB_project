@@ -48,7 +48,8 @@ class AdminController
         $agregBool=$g->getAgregBool();
 
         
-
+        $ime=$_SESSION["username"];
+        $naziv=$ime;
 
         
         $USERTYPE=$this->USERTYPE;

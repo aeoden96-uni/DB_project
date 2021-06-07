@@ -24,7 +24,7 @@
                   Hello, <?php echo $ime; ?>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <li><a class="dropdown-item" href="index.php?rt=ucenik/otherSettings">User Settings</a></li>
+                  <li><a class="dropdown-item" href="index.php?rt=<?php echo $this->USERTYPE;?>/otherSettings">Settings</a></li>
                   <li><a class="dropdown-item" href="index.php?rt=start/logout">Sign out</a></li>
                 </ul>
               </div>
