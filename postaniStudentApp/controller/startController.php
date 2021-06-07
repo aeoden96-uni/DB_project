@@ -202,27 +202,42 @@ class StartController
 
 	public function loginCheckFaks(){
 		session_start();
+		$ms= new MongoService();
+		
 
-		//$check=$us->checkUserLogin();
+		$db=$ms->returnFaksWithUsername($_POST["username"]);
 		$check=true;
+		
 
+		if($db == null){
+			echo $_POST["username"];
+			echo " tog usera nema";
+			$succesVar="unsuccessful. :(";
+			session_destroy();
+			header("Refresh:2; url=index.php?rt=start");
+		}
+		elseif($db->admin_password == $_POST["password"]){
+			$succesVar="successful.";
+			$_SESSION["account_type"] = "faks";
+			$_SESSION["faks_id"]= $db->_id;
 
-		if($check){
-			header("Refresh:2; url=index.php?rt=faks");
-			$succesVar="successful. :)";
+			$_SESSION["naziv"]= $db->naziv;
 
+			$_SESSION["username"]= (string)$db->admin_username;
+			
 
-            $_SESSION["account_type"] = "faks";
-			$_SESSION["user_id"]= "id2528";
-			$_SESSION["username"]= "username*";
-
+			header("Refresh:2; url=index.php?rt=start");
+			
 		}
 		else{
+			echo $db->ime;
 			$succesVar="unsuccessful. :(";
 			session_destroy();
 			header("Refresh:2; url=index.php?rt=start");
 		}
 
+
+		
 		require_once __DIR__ . '/../view/start_login.php';
 	}
 
@@ -262,18 +277,18 @@ class StartController
 		$ms= new MongoService();
 		
 
-		$db=$ms->returnUcenikWithUsername($_POST["oib"]);
+		$db=$ms->returnUcenikWithUsername($_POST["username"]);
 		$check=true;
 		
 
 		if($db == null){
-			echo $_POST["oib"];
+			echo $_POST["username"];
 			echo " tog usera nema";
 			$succesVar="unsuccessful. :(";
 			session_destroy();
 			header("Refresh:2; url=index.php?rt=start");
 		}
-		elseif($db->ime == $_POST["ime"] || $db->ime != $_POST["ime"] ){
+		elseif($db->password == $_POST["password"]){
 			$succesVar="successful.";
 			$_SESSION["account_type"] = "ucenik";
 			$_SESSION["user_id"]= $db->_id;

@@ -9,7 +9,7 @@
     </ol>
 </nav>
 <h1 class="h2">Other settings</h1>
-<p>This is the homepage of a simple admin interface which is part of a tutorial written on Themesberg</p>
+<p>Here you can change some of your information.</p>
 
 
 <div class="col-12 col-xl-4 mb-4 mb-lg-0">

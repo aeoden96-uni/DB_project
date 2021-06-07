@@ -34,14 +34,14 @@ function addFirstButtons($id){
         <li class="breadcrumb-item active">My List</li>
     </ol>
 </nav>
-<h1 class="h2">My current faculty list</h1>
-<p>This is the homepage of a simple admin interface which is part of a tutorial written on Themesberg</p>
+<h1 class="h2">My current faculty list <span class="text-<?php echo $lockBool? "warning" : "success"; ?>"><?php echo $lockBool? "LOCKED" : "NOT LOCKED"; ?></span></h1>
+<p>This is your current list of favourite faculties. It will lock after set date,then you wont be able to change it. </p>
 
 
 
 
 <div class="card">
-    <h5 class="card-header">Your current faculty list</h5>
+    <h5 class="card-header">My current faculty list <span class="text-<?php echo $lockBool? "warning" : "success"; ?>"><?php echo $lockBool? "LOCKED" : "NOT LOCKED"; ?></span></h5>
     <div class="card-body">
         <div class="table-responsive">
             <table class="table">
@@ -51,8 +51,11 @@ function addFirstButtons($id){
                     <th scope="col">Faculty name</th>
                     <th scope="col">OIB</th>
                     <th scope="col">Quota</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
+                    <?php echo $lockBool?
+                    "": '<th scope="col"></th>
+                    <th scope="col"></th>';
+                    ?>
+                    
                     </tr>
                 </thead>
                 <tbody>
@@ -68,10 +71,11 @@ function addFirstButtons($id){
                                 '<th scope="row">'.($redBr+1) .'</th>'. 
                                 '<td>'.$faks->naziv .'</td>'. 
                                 '<td>'.$faks->oib .'</td>'.
-                                '<td>'.$faks->kvota .'</td>'.
-                                '<td>'.(($redBr==0 || $redBr==count($new_list)-1)? addFirstButtons($redBr ):addButtons($redBr )).'</td>'.
-                                '<td><a href="index.php?rt=ucenik/myListDelete/'.$redBr .'" class="btn btn-sm btn-warning">Remove</a></td>'.
-                            '</tr>';
+                                '<td>'.$faks->kvota .'</td>';
+
+                            if(!$lockBool) echo  '<td>'.(($redBr==0 || $redBr==count($new_list)-1)? addFirstButtons($redBr ):addButtons($redBr )).'</td>'.
+                                '<td><a href="index.php?rt=ucenik/myListDelete/'.$redBr .'" class="btn btn-sm btn-warning">Remove</a></td>';
+                            echo '</tr>';
                             $redBr+=1;
                         }
                     ?>
@@ -79,7 +83,7 @@ function addFirstButtons($id){
                 </tbody>
                 </table>
         </div>
-        <a href="index.php?rt=ucenik/popis" class="btn btn-block btn-success">LOCK</a>
+        
         
     </div>
 </div>

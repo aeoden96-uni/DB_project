@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__ . '/../model/globalservice.class.php';
 
 require_once __DIR__ . '/../model/mongoservice.class.php';
 
@@ -31,10 +32,26 @@ class UcenikController
         $activeInd=0;
 
 
-        $ucenikName=$_SESSION["user_name"];
+        $ime=$_SESSION["user_name"];
+        $naziv=$ime;
         $activeInd=0;
         $student=$m->returnUcenikWithId($_SESSION["user_id"]);
         $new_list=$m->getStudentsList($student);
+
+        ////////////////GLOBAL SETTINGS
+        $g= new GlobalService();
+    
+        $lockDate= $g->getLockDate();
+        $lockDateString=$lockDate->toDateTime()->format('d.m.Y');
+
+        $resultDate= $g->getResultsDate();
+        $resultDateString=$resultDate->toDateTime()->format('d.m.Y');
+
+        $resultBool= $g->getResultsBool();
+        $lockBool= $g->getLockBool();
+        
+        ////////////////GLOBAL SETTINGS
+
 
         $USERTYPE=$this->USERTYPE;
         require_once __DIR__ . '/../view/'.$USERTYPE.'/index.php';    
@@ -48,14 +65,23 @@ class UcenikController
 
         $m= new MongoService();
 
+        //GLOBAL
+        $g= new GlobalService();
+        $lockBool= $g->getLockBool();
+        $resultBool= $g->getResultsBool();
+        ////////
+
         $user=$m->returnUcenikWithUsername($_SESSION["username"]);
 
-        $natjecanja=$user->drzavna_natjecanja[0];
+        $natjecanja=$user->drzavna_natjecanja;
 
-        $ocjene=$user->ocjene[0];
+        $ocjene=$user->ocjene;
+
+        
         
 
-        $ucenikName=$_SESSION["user_name"];
+        $ime=$_SESSION["user_name"];
+        $naziv=$ime;
         $activeInd=1;
         
         $USERTYPE=$this->USERTYPE;
@@ -72,7 +98,7 @@ class UcenikController
 
         $student=$m->returnUcenikWithId($_SESSION["user_id"]);
 
-        $lista= $student->lista_fakulteta_nova;
+        $lista= $student->lista_fakulteta;
 
 
         $m->pushNewListToStudentWithId($_SESSION["user_id"],$lista,$index,"UP");
@@ -88,7 +114,7 @@ class UcenikController
 
         $student=$m->returnUcenikWithId($_SESSION["user_id"]);
 
-        $lista= $student->lista_fakulteta_nova;
+        $lista= $student->lista_fakulteta;
 
         $m->pushNewListToStudentWithId($_SESSION["user_id"],$lista,$index,"DOWN");
 
@@ -103,7 +129,7 @@ class UcenikController
 
         $student=$m->returnUcenikWithId($_SESSION["user_id"]);
 
-        $lista= $student->lista_fakulteta_nova;
+        $lista= $student->lista_fakulteta;
 
         echo ($faksOib);
         echo gettype($faksOib);
@@ -121,7 +147,7 @@ class UcenikController
 
         $student=$m->returnUcenikWithId($_SESSION["user_id"]);
 
-        $lista= $student->lista_fakulteta_nova;
+        $lista= $student->lista_fakulteta;
 
         $m->pushNewListToStudentWithId($_SESSION["user_id"],$lista,$index,"DEL");
 
@@ -140,7 +166,16 @@ class UcenikController
         
         $new_list=$m->getStudentsList($student);
 
-        $ucenikName=$_SESSION["user_name"];
+        
+        //GLOBAL
+        $g= new GlobalService();
+        $resultBool= $g->getResultsBool();
+        $lockBool= $g->getLockBool();
+        /////////////////////////
+
+
+        $ime=$_SESSION["user_name"];
+        $naziv=$ime;
         $activeInd=2;
 
         $USERTYPE=$this->USERTYPE;
@@ -158,10 +193,16 @@ class UcenikController
         $list=$m->returnAllFaks();
 
         $user=$m->returnUcenikWithUsername($_SESSION["username"]);
-        $listaFaksevaUcenika=$user->lista_fakulteta_nova;
+        $listaFaksevaUcenika=$user->lista_fakulteta;
 
 
-        $ucenikName=$_SESSION["user_name"];
+        //GLOBAL
+        $g= new GlobalService();
+        $lockBool= $g->getLockBool();
+        $resultBool= $g->getResultsBool();
+        ////////
+        $ime=$_SESSION["user_name"];
+        $naziv=$ime;
         $activeInd=3;
         
         $USERTYPE=$this->USERTYPE;
@@ -172,13 +213,18 @@ class UcenikController
     public function results() {
 		session_start();
         $this->checkPrivilege();
-        $ps=new ProductService();
-        $us=new UserService();
+        
        
 
-
-        $ucenikName=$_SESSION["user_name"];
+        //GLOBAL
+        $g= new GlobalService();
+        $resultBool = $g->getResultsBool();
+        ////////
+        $ime=$_SESSION["user_name"];
+        $naziv=$ime;
         $activeInd=4;
+
+        $list=null;
         
         $USERTYPE=$this->USERTYPE;
         require_once __DIR__ . '/../view/'.$USERTYPE.'/results.php';    
@@ -189,7 +235,15 @@ class UcenikController
 		session_start();
         $this->checkPrivilege();
         $m= new MongoService();
-        $ucenikName=$_SESSION["user_name"];
+
+        //GLOBAL
+        $g= new GlobalService();
+        $lockBool= $g->getLockBool();
+        $resultBool= $g->getResultsBool();
+        ////////
+
+        $ime=$_SESSION["user_name"];
+        $naziv=$ime;
         $activeInd=5;
         
         $USERTYPE=$this->USERTYPE;
@@ -204,7 +258,8 @@ class UcenikController
 		session_start();
         $this->checkPrivilege();
         $m= new MongoService();
-        $ucenikName=$_SESSION["user_name"];
+        $ime=$_SESSION["user_name"];
+        $naziv=$ime;
         $activeInd=5;
         
         $USERTYPE=$this->USERTYPE;
@@ -227,77 +282,6 @@ class UcenikController
 
 	}
 
-
-	public function add() { 
-		session_start();
-        $userName= $_SESSION["username"];
-		$this->checkPrivilege();
-        $title = 'Store - Add new product';
-		$activeInd=6;
-
-		require_once __DIR__ . '/../view/main_add.php';
-		require_once __DIR__ . '/../view/_footer.php';
-	}
-
-	public function addComment(){
-		session_start();
-        $this->checkPrivilege();
-        $ps=new ProductService();
-        $us=new UserService();
-        $title = 'Store - Add new comment';
-
-		$ps->addComment($_POST["product_id"],$_POST["rating"],$_POST["comment"]);
-
-		header( 'Location: index.php?rt=main/history' );
-    	exit();
-
-	}
-
-	public function addResult() { 
-		session_start();
-
-		$this->checkPrivilege();
-		$ps=new ProductService();
-		$us=new UserService();
-        $userName= $_SESSION["username"];
-
-		$user=$us->getUserFromUsername($userName);
-
-		$ps->addProduct($user->user_id,$_POST["productName"],$_POST["description"],$_POST["price"]);
-
-		header( 'Location: index.php?rt=main' );
-    	exit();
-	}
-
-	public function history() {
-		session_start();
-        $userName= $_SESSION["username"];
-		$this->checkPrivilege();
-		$ps=new ProductService();
-		$us=new UserService();
-        $title = 'Store - '. $userName. "'s history";
-		$activeInd=3;
-
-		$myProductList = $ps->getTransactionsFromUsername($userName);
-		$user = $us->getUserFromUsername($userName);
-
-		require_once __DIR__ . '/../view/main_history.php';
-		require_once __DIR__ . '/../view/_footer.php';
-	}
-
-    public function main() {
-        session_start();
-        $userName= $_SESSION["username"];
-        $this->checkPrivilege();
-        $ps=new ProductService();
-        $title = 'Store - Main page';
-        $activeInd=2;
-
-        $myProductList = $ps->getTableFromSQL();
-
-        require_once __DIR__ . '/../view/main_index.php';
-        require_once __DIR__ . '/../view/_footer.php';
-    }
 
 
 };

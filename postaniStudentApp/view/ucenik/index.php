@@ -9,7 +9,7 @@
     </ol>
 </nav>
 <h1 class="h2">Dashboard</h1>
-<p>This is the homepage of a simple admin interface which is part of a tutorial written on Themesberg</p>
+<p>This is your student dashboard.</p>
 
 <!--HORIZ CONTAINER
 my-4 = MARGIN top bottom
@@ -19,34 +19,25 @@ my-4 = MARGIN top bottom
     <!--ONE LITTLE MODAL----->
     <div class="col-12 col-md-6 col-lg-3 mb-4 mb-lg-0">
         <div class="card">
-            <h5 class="card-header">Lock &nbsp;<a href="#" class="btn btn-sm btn-info">Lock</a></h5>
+            <h5 class="card-header">Lock status <span class="text-<?php echo $lockBool? "warning" : "success"; ?>"><?php echo $lockBool? "LOCKED" : "UNLOCKED"; ?></span></h5>
             <div class="card-body">
-              <h5 class="card-title">Lock your faculty list</h5>
-              <p class="card-text">Faculties on list : <span class="text-warning">7</span> </p>
-              <p class="card-text">Status: <span class="text-warning">unlocked</span> </p>
+              <h5 class="card-title">Planned lock date: <?php echo $lockDateString;?></h5>
+              <p class="card-text">Here you can see how much time you have until your faculty list is locked.</p>
               
             </div>
           </div>
     </div>
     <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">
         <div class="card">
-            <h5 class="card-header">Check</h5>
+            <h5 class="card-header">Results status <span class="text-<?php echo $resultBool? "success" : "warning"; ?>"><?php echo $resultBool? "SHOWN" : "NOT SHOWN"; ?></span></h5>
             <div class="card-body">
-              <h5 class="card-title">Check your info</h5>
-              <p class="card-text">Make sure all your information in correct before lock phase.</p>
-            </div>
-          </div>
-    </div>
-    <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">
-        <div class="card">
-            <h5 class="card-header"><s>Results</s></h5>
-            <div class="card-body">
-              <h5 class="card-title text-danger">No results yet</h5>
-              <p class="card-text">Check your deadline for results to show.</p>
+              <h5 class="card-title">Planned results date: <?php echo $resultDateString;?></h5>
+              <p class="card-text">Here you can when will when will results be shown.</p>
               
             </div>
           </div>
     </div>
+
 
     <!--ONE LITTLE MODAL----->
     <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">

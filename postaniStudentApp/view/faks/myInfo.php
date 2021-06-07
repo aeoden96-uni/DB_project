@@ -15,9 +15,27 @@
 <div class="row">
     <div class="col-12 col-xl-8 mb-4 mb-lg-0">
         <div class="card">
-            <h5 class="card-header">Test scores compared to peers</h5>
+            <h5 class="card-header">Faculty details</h5>
             <div class="card-body">
-                <div id="traffic-chart"></div>
+                                 
+                
+                <h5 class="card-title">Factors</h5>
+                <p class="card-text">Croatian -  <?php echo $faks->uvjeti[0]->hrvatski;?>x</p>
+                <p class="card-text">English -  <?php echo $faks->uvjeti[0]->engleski;?>x</p>
+                <p class="card-text">Mathematics -  <?php echo $faks->uvjeti[0]->matematika;?>x</p>
+
+                <h5 class="card-title">Additional required subjects</h5>
+                <p class="card-text">Subject -  <?php echo $faks->uvjeti[0]->izborni;?></p>
+
+                <h5 class="card-title">Additional points for competitions</h5>
+                <p class="card-text">Subject -  <?php echo $faks->uvjeti[0]->natjecanje;?></p>
+
+                <h5 class="card-title">Quota</h5>
+                <p class="card-text">Quota -  <?php echo $faks->kvota;?></p>
+
+               
+
+
             </div>
         </div> 
     </div>
@@ -25,15 +43,15 @@
 
     <div class="col-12 col-xl-4">
         <div class="card">
-            <h5 class="card-header">Info for user : ***</h5>
+            <h5 class="card-header">Info for admin : <?php echo $faks->admin_username;?><h5>
             <div class="card-body">
               <h5 class="card-title">Username</h5>
-              <p class="card-text">Some username</p>
-              <!--<p class="card-text text-success">2.5% increase since last month</p>-->
+              <p class="card-text"><?php echo $faks->admin_username;?></p>
               <h5 class="card-title">OIB</h5>
-              <p class="card-text">23564453123</p>
+              <p class="card-text"><?php echo $faks->oib;?></p>
+              <h5 class="card-title">Faculty name</h5>
+              <p class="card-text"><?php echo $faks->naziv;?></p>
 
-               
             </div>
         </div>
     </div>

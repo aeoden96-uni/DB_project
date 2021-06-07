@@ -17,21 +17,26 @@ class MongoService
 
     function returnUcenikWithId($id){
         
-        return $this->queryOne( "studenti", "_id", $id);
+        return $this->queryOne( "novi_studenti", "_id", $id);
 
     }
 
     function returnUcenikWithUsername($username){
         
-        return $this->queryOne( "studenti", "username", $username);
+        return $this->queryOne( "novi_studenti", "username", $username);
+
+    }
+
+    function returnFaksWithUsername($username){
+        
+        return $this->queryOne( "fakulteti", "admin_username", $username);
 
     }
 
     function queryOne($kolekcija, $atribut, $vrijednost){
         $db = DB2::getConnection(); 
 
-        if ($atribut== "username")
-            $vrijednost= (int)$vrijednost;
+        
 
         //$id  = new \MongoDB\BSON\ObjectId($id); DODAJ OVO AKO ATLAS RADI SAM SVOJ ID
         $filter  = [ $atribut => $vrijednost];
@@ -43,6 +48,8 @@ class MongoService
 
         //https://www.php.net/manual/en/mongodb-driver-manager.executequery.php
         $result = $db->executeQuery("project.".$kolekcija,$query); //VRACA fakultete s istim ID OPET KAO LISTU objekata
+
+        
 
         return $result->toArray()[0]; //Vraca samo prvi clan liste ,jer je cijela lista zapravo [ ucenik ]
             
@@ -57,7 +64,7 @@ class MongoService
             ['multi' => false, 'upsert' => false]
         );
 
-        $result = $db->executeBulkWrite("project.studenti",$bulk); 
+        $result = $db->executeBulkWrite("project.novi_studenti",$bulk); 
     }
 
     function queryAll($kolekcija){
@@ -101,17 +108,16 @@ class MongoService
         }
         
 
-        //var_dump($lista);
-        //var_dump($lista);
+
 
         $bulk = new MongoDB\Driver\BulkWrite;
         $bulk->update(
             ['_id' => $userId],
-            ['$set' => ['lista_fakulteta_nova' => $lista  ]],
+            ['$set' => ['lista_fakulteta' => $lista  ]],
             ['multi' => false, 'upsert' => false]
         );
 
-        $result = $db->executeBulkWrite("project.studenti",$bulk); 
+        $result = $db->executeBulkWrite("project.novi_studenti",$bulk); 
                 
 
     }
@@ -121,17 +127,18 @@ class MongoService
         //NE VRACA ISTIM REDOSLIJEDOM
         $db = DB2::getConnection(); 
 
+        
 
 
         $command = new MongoDB\Driver\Command([
-            'aggregate' => 'studenti',
+            'aggregate' => 'novi_studenti',
             'pipeline' => [
-                ['$match' => ['_id' => '60b9f9d265b6b6dbd1ea3a48']],
-                ['$unwind' => ['path' => '$lista_fakulteta_nova','includeArrayIndex' => 'redniBroj']],
+                ['$match' => ['_id' => $student->_id]],
+                ['$unwind' => ['path' => '$lista_fakulteta','includeArrayIndex' => 'redniBroj']],
 
-                ['$lookup' => ['from' => 'fakulteti','localField' => 'lista_fakulteta_nova','foreignField'=> 'oib', 'as'=> 'fakultetInfo']],
+                ['$lookup' => ['from' => 'fakulteti','localField' => 'lista_fakulteta','foreignField'=> 'oib', 'as'=> 'fakultetInfo']],
                 ['$sort' => ['redniBroj'=> 1]],
-                ['$group' => ['_id' => '60b9f9d265b6b6dbd1ea3a48', 'fieldN' => [ '$push' => '$fakultetInfo'  ]]]
+                ['$group' => ['_id' => $student->_id, 'fieldN' => [ '$push' => '$fakultetInfo'  ]]]
 
             ],
             'cursor' => new stdClass,

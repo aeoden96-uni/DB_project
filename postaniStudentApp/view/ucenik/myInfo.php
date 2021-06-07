@@ -8,7 +8,7 @@
     </ol>
 </nav>
 <h1 class="h2">User info</h1>
-<p>This is the homepage of a simple admin interface which is part of a tutorial written on Themesberg</p>
+<p>This is your personal info.</p>
 
 
 <!-- DEFINES ELEMENTS ON SAME HORIZONTAL LEVEL --->
@@ -37,24 +37,9 @@
                 </div>
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped  " role="progressbar" 
-                    style="width: <?php echo (int)(($ocjene->fizika)/5*100);?>%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="5">Physics <?php echo $ocjene->fizika;?></div>
+                    style="width: <?php echo (int)(($ocjene->izborni->ocjena)/5*100);?>%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="5">Izborni: <?php echo $ocjene->izborni->naziv . " ". $ocjene->izborni->ocjena;?></div>
                 </div>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped bg-info" role="progressbar" 
-                    style="width: <?php echo (int)(($ocjene->kemija)/5*100);?>%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="5">Chemistry <?php echo $ocjene->kemija;?></div>
-                </div>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped  " role="progressbar" 
-                    style="width: <?php echo (int)(($ocjene->geografija)/5*100);?>%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="5">Geography <?php echo $ocjene->geografija;?></div>
-                </div>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped bg-info" role="progressbar" 
-                    style="width: <?php echo (int)(($ocjene->povijest)/5*100);?>%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="5">History <?php echo $ocjene->povijest;?></div>
-                </div>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped  " role="progressbar" 
-                    style="width: <?php echo (int)(($ocjene->biologija)/5*100);?>%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="5">Biology <?php echo $ocjene->biologija;?></div>
-                </div>
+                
             </div>
         </div>
         <!--<div style="margin-bottom: 10px;" class="card">
@@ -67,16 +52,9 @@
             <h5 class="card-header">Best place at state comeptitions</h5>
             <div class="card-body">
                 <ul class="list-group">
-                    <li class="list-group-item <?php echo ($natjecanja->mat? "list-group-item-success":"");?>">
-                                        Math <span class="badge bg-dark"><?php echo $natjecanja->mat;?></span></li>
-                    <li class="list-group-item <?php echo ($natjecanja->fiz? "list-group-item-success":"");?>">
-                                        Physics <span class="badge bg-dark"><?php echo $natjecanja->fiz;?></span></li>
-                    <li class="list-group-item <?php echo ($natjecanja->kem? "list-group-item-success":"");?>">
-                                        Chemistry <span class="badge bg-dark"><?php echo $natjecanja->kem;?></span></li>
-                    <li class="list-group-item <?php echo ($natjecanja->bio? "list-group-item-success":"");?>">
-                                        Biology <span class="badge bg-dark"><?php echo $natjecanja->bio;?></span></li>
-                    <li class="list-group-item <?php echo ($natjecanja->geo? "list-group-item-success":"");?>">
-                                        Geography <span class="badge bg-dark"><?php echo $natjecanja->geo;?></span></li>
+                    <li class="list-group-item list-group-item-success">
+                    <?php echo $natjecanja->naziv;?> <span class="badge bg-dark"><?php echo $natjecanja->mjesto;?></span></li>
+                   
                 </ul>
             </div>
         </div>

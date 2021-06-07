@@ -8,8 +8,8 @@
         <li class="breadcrumb-item active">Results</li>
     </ol>
 </nav>
-<h1 class="h2"><s>Results</s></h1>
-<p>This is the homepage of a simple admin interface which is part of a tutorial written on Themesberg</p>
+<h1 class="h2">Results</h1>
+<p>This is the result list.</p>
 
 
 <?php include __DIR__ . '/../_footer.php'; ?>
