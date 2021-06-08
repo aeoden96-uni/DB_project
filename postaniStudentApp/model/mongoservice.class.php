@@ -400,103 +400,125 @@ class MongoService
 
     }
 
-    public function resetAggreagtion(){
-        echo "you initiated aggregation RESET procedure.";
+    public function dataS(){
+      $studenti= array();
 
+        $student = new stdClass();
+        $student->ime="A";
+        $student->lista= array("F1","F2","F3");
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
 
+        $student = new stdClass();
+        $student->ime="B";
+        $student->lista= array("F3","F2","F1");
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        $student = new stdClass();
+        $student->ime="C";
+        $student->lista= array("F1","F2","F3");
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        $student = new stdClass();
+        $student->ime="D";
+        $student->lista= array("F2","F3","F1");
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        $student = new stdClass();
+        $student->ime="E";
+        $student->lista= array("F3","F2","F1");
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        $student = new stdClass();
+        $student->ime="F";
+        $student->lista= array("F2","F3","F1");
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        $student = new stdClass();
+        $student->ime="G";
+        $student->lista= array("F3","F2","F1");
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        $student = new stdClass();
+        $student->ime="H";
+        $student->lista= array("F2","F1","F3");
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        $student = new stdClass();
+        $student->ime="I";
+        $student->lista= array("F1","F3","F2");
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        $student = new stdClass();
+        $student->ime="J";
+        $student->lista= array("F2","F3","F1");
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        $student = new stdClass();
+        $student->ime="K";
+        $student->lista= array("F1","F2","F3");
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        return $studenti;
+    }
+
+    public function dataF(){
         $faksevi= array();
 
         $faks = new stdClass();
         $faks->ime="F1";
-        $faks->id=1;
-        $faks->bodovna_lista= array("A", "C", "B","E", "D","F","G","H");
+        $faks->id="F1";
+        $faks->bodovna_lista= array("A", "C", "B","K","E","J","I", "D","F","G","H");
         $faks->upisni_list=array();
         $faks->q=3;
         $faksevi[]= $faks;
 
         $faks = new stdClass();
         $faks->ime="F2";
-        $faks->id=2;
-        $faks->bodovna_lista= array("D", "A", "B","C", "E","F","G","H");
+        $faks->id="F2";
+        $faks->bodovna_lista= array("D", "A", "B","K","C","I", "E","F","J","G","H");
         $faks->upisni_list=array();
         $faks->q=3;
         $faksevi[]= $faks;
 
         $faks = new stdClass();
         $faks->ime="F3";
-        $faks->id=3;
-        $faks->bodovna_lista= array("F", "C", "A","B", "D","H","G","E");
+        $faks->id="F3";
+        $faks->bodovna_lista= array("F", "C", "A","B", "D","H","G","E","I","J","K");
         $faks->upisni_list=array();
 
         $faks->q=3;
 
         $faksevi[]= $faks;
 
-        
+        return $faksevi;
+    }
 
-        //var_dump($faksevi);
+    public function run($faksevi,$studenti){
+        echo "you initiated aggregation RESET procedure.";
 
 
-        $studenti= array();
 
-        $student = new stdClass();
-        $student->ime="A";
-        $student->lista= array(1,2,3);
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
+        $c=1;
+        while($c && count($studenti)>0){
 
-        $student = new stdClass();
-        $student->ime="B";
-        $student->lista= array(3,2,1);
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        $student = new stdClass();
-        $student->ime="C";
-        $student->lista= array(1,2,3);
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        $student = new stdClass();
-        $student->ime="D";
-        $student->lista= array(2,3,1);
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        $student = new stdClass();
-        $student->ime="E";
-        $student->lista= array(3,2,1);
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        $student = new stdClass();
-        $student->ime="F";
-        $student->lista= array(2,3,1);
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        $student = new stdClass();
-        $student->ime="G";
-        $student->lista= array(3,2,1);
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        $student = new stdClass();
-        $student->ime="H";
-        $student->lista= array(2,1,3);
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-        var_dump($studenti);
-        var_dump($faksevi);
-
-        $c=2;
-        while(count($studenti)>0){
             $studenti=array_values($studenti);
             $faksevi=array_values($faksevi);
 
             foreach($faksevi as $f){
                 $f->bodovna_lista=array_values($f->bodovna_lista);
             }
+            //init indexa gotov
                       
 
 
@@ -514,18 +536,35 @@ class MongoService
                     }
                 }
             }
+
+            //var_dump($faksevi);
+            //var_dump($studenti);
             
 
 
 
             foreach($studenti as $key => $student){
-                //echo "<br>B index=".$key. " faks=" . "<br>";
 
                 $upisao=array_search(1, $student->accepted);
-                if($upisao>=0 && false !==$upisao){
-                    $id_faksa=$student->lista[$upisao];
-                    $faksevi[$id_faksa-1]->upisni_list[]=$student->ime;
-                    $faksevi[$id_faksa-1]->q--;
+                if($upisao>=0 && false !==$upisao){           //AKO JE taj  accepted na faks s indexom 'upisao' 
+                                                              //upisao == INDEX oiba faksa u ucenikovom popisu
+
+                    
+                    
+                    foreach($faksevi as $key4 => $faks){
+                        //var_dump($student->lista);
+                        //var_dump($student->accepted);
+                        
+                        if ($faks->id == $student->lista[$upisao]){
+                            $id_faksa=$key4;
+                            break;
+
+                        }
+                    }
+
+                    
+                    $faksevi[$id_faksa]->upisni_list[]=$student->ime;
+                    $faksevi[$id_faksa]->q--;
 
                     foreach($faksevi as $f){ //delete all ocurances of this student
                         if (($key2 = array_search($student->ime, $f->bodovna_lista)) !== false) {
@@ -537,18 +576,90 @@ class MongoService
                 }
             }
 
-            var_dump($studenti);
-            var_dump($faksevi);
+            var_dump("NAKON ". (2-$c+1). " ITERACIJE" );
+            //var_dump($studenti);
+            //var_dump($faksevi);
 
-            
+            $all_zero=true;  
+            foreach($faksevi as $f){
+              
+              if($f->q > 0)
+                $all_zero=false;
+              
+
+            }
+            if($all_zero) break;
 
 
+ 
             $c--;
         }
+        var_dump($studenti);
+        var_dump($faksevi);
     
     }
 
-    
+    public function resetAggreagtion(){
+
+      //var_dump($this->dataF()[0]);
+      //$this->run($this->dataF(),$this->dataS());
+
+      $faksevi=$this->queryAll("lista");
+
+      foreach($faksevi as $f){
+        $f->upisni_list=array();
+        $f->bodovna_lista=$f->oibovi;
+        unset($f->oibovi);
+        unset($f->lista_bodova);
+        $f->id= $f->_id;
+        $f->ime= $f->_id;
+        unset($f->_id);
+        unset($f->izbor);
+        $f->q= 30;
+
+
+      }
+
+      $studenti=$this->queryAll("studenti");
+
+      foreach($studenti as $key => $s){
+
+        if(count($s->lista_fakulteta)==0 ){
+          unset($studenti[$key]);
+          continue;
+        }
+
+
+
+          unset($s->datum_rodenja);
+          unset($s->prezime);
+          unset($s->ocjene);
+          unset($s->email);
+          unset($s->ime);
+          unset($s->_id);
+          unset($s->email);
+          unset($s->password);
+          unset($s->drzavna_natjecanja);
+          
+          if(!isset($s->lista_fakulteta)){
+            print_r("<br>");
+            print_r($s->username . "<br>");
+          }
+          $s->accepted= array_fill(0,count($s->lista_fakulteta),0);
+          $s->lista=$s->lista_fakulteta;
+          unset($s->lista_fakulteta);
+
+          $s->ime=$s->username;
+          unset($s->username);
+
+          
+
+      }
+
+      //var_dump($faksevi[0]);
+      //var_dump($studenti[0]);
+      $this->run($faksevi,$studenti);
+    }
 
 
 
