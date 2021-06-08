@@ -20,15 +20,15 @@
                                  
                 
                 <h5 class="card-title">Factors</h5>
-                <p class="card-text">Croatian -  <?php echo $faks->uvjeti[0]->hrvatski;?>x</p>
-                <p class="card-text">English -  <?php echo $faks->uvjeti[0]->engleski;?>x</p>
-                <p class="card-text">Mathematics -  <?php echo $faks->uvjeti[0]->matematika;?>x</p>
+                <p class="card-text">Croatian -  <?php echo $faks->uvjeti->hrvatski;?>x</p>
+                <p class="card-text">English -  <?php echo $faks->uvjeti->engleski;?>x</p>
+                <p class="card-text">Mathematics -  <?php echo $faks->uvjeti->matematika;?>x</p>
 
                 <h5 class="card-title">Additional required subjects</h5>
-                <p class="card-text">Subject -  <?php echo $faks->uvjeti[0]->izborni;?></p>
+                <p class="card-text">Subject -  <?php echo $faks->uvjeti->izborni;?></p>
 
                 <h5 class="card-title">Additional points for competitions</h5>
-                <p class="card-text">Subject -  <?php echo $faks->uvjeti[0]->natjecanje;?></p>
+                <p class="card-text">Subject -  <?php echo $faks->uvjeti->natjecanje;?></p>
 
                 <h5 class="card-title">Quota</h5>
                 <p class="card-text">Quota -  <?php echo $faks->kvota;?></p>
@@ -46,11 +46,11 @@
             <h5 class="card-header">Info for admin : <?php echo $faks->admin_username;?><h5>
             <div class="card-body">
               <h5 class="card-title">Username</h5>
-              <p class="card-text"><?php echo $faks->admin_username;?></p>
+              <p ><?php echo $faks->admin_username;?></p>
               <h5 class="card-title">OIB</h5>
-              <p class="card-text"><?php echo $faks->oib;?></p>
+              <p ><?php echo $faks->oib;?></p>
               <h5 class="card-title">Faculty name</h5>
-              <p class="card-text"><?php echo $faks->naziv;?></p>
+              <p ><?php echo $faks->naziv;?></p>
 
             </div>
         </div>

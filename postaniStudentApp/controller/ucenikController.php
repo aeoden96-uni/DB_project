@@ -163,9 +163,11 @@ class UcenikController
         $m= new MongoService();
 
         $student=$m->returnUcenikWithId($_SESSION["user_id"]);
+
+        
         
         $new_list=$m->getStudentsList($student);
-
+        
         
         //GLOBAL
         $g= new GlobalService();
@@ -213,6 +215,24 @@ class UcenikController
     public function results() {
 		session_start();
         $this->checkPrivilege();
+        $m= new MongoService();
+        $student=$m->returnUcenikWithId($_SESSION["user_id"]);
+
+        if(!isset($student->upisao) || $student->upisao == null){
+            header( 'Location: index.php?rt=ucenik');
+		    exit();
+
+        }
+        if($student->upisao == -1){
+            $upisao= false;
+
+        }
+        else{
+            $upisao= true;
+            $faks=$m->returnFaksWithOIB( $student->upisao);
+        }
+
+        
         
        
 
@@ -224,7 +244,7 @@ class UcenikController
         $naziv=$ime;
         $activeInd=4;
 
-        $list=null;
+        
         
         $USERTYPE=$this->USERTYPE;
         require_once __DIR__ . '/../view/'.$USERTYPE.'/results.php';    

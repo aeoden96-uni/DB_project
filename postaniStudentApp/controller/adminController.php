@@ -89,12 +89,12 @@ class AdminController
         $g= new GlobalService();
         $m= new MongoService();
 
-        $m->agg2();
+        $m->startAggreagtion();
 
         $g->switchAgregBool(true);
 
-        //header( 'Location: index.php?rt=admin');
-		//exit();  
+        header( 'Location: index.php?rt=admin');
+		exit();  
 
 	}
 	public function reset() {
@@ -110,8 +110,8 @@ class AdminController
 
         $g->switchAgregBool(false);
 
-        //header( 'Location: index.php?rt=admin');
-		//exit();
+        header( 'Location: index.php?rt=admin');
+		exit();
 
 	}
 

@@ -15,15 +15,20 @@ class MongoService
         return $this->queryOne( "fakulteti", "_id", $id);
     }
 
+    function returnFaksWithOIB($oib){
+
+      return $this->queryOne( "fakulteti", "oib", $oib);
+    }
+
     function returnUcenikWithId($id){
         
-        return $this->queryOne( "novi_studenti", "_id", $id);
+        return $this->queryOne( "studenti", "_id", $id);
 
     }
 
     function returnUcenikWithUsername($username){
         
-        return $this->queryOne( "novi_studenti", "username", $username);
+        return $this->queryOne( "studenti", "username", $username);
 
     }
 
@@ -70,7 +75,7 @@ class MongoService
             ['multi' => false, 'upsert' => false]
         );
 
-        $result = $db->executeBulkWrite("project.novi_studenti",$bulk); 
+        $result = $db->executeBulkWrite("project.studenti",$bulk); 
     }
 
     function queryAll($kolekcija){
@@ -123,7 +128,7 @@ class MongoService
             ['multi' => false, 'upsert' => false]
         );
 
-        $result = $db->executeBulkWrite("project.novi_studenti",$bulk); 
+        $result = $db->executeBulkWrite("project.studenti",$bulk); 
                 
 
     }
@@ -137,7 +142,7 @@ class MongoService
 
 
         $command = new MongoDB\Driver\Command([
-            'aggregate' => 'novi_studenti',
+            'aggregate' => 'studenti',
             'pipeline' => [
                 ['$match' => ['_id' => $student->_id]],
                 ['$unwind' => ['path' => '$lista_fakulteta','includeArrayIndex' => 'redniBroj']],
@@ -162,347 +167,254 @@ class MongoService
 
     }
 
-    public function startAggreagtion(){
-        echo "you initiated aggregation procedure.";
+    public function getEnrolledStudentsForOIB($oib){
+      $db = DB2::getConnection(); 
 
-
-        $db = DB2::getConnection(); 
-
+        
 
 
         $command = new MongoDB\Driver\Command([
-            'aggregate' => 'fakultet',
+            'aggregate' => 'lista',
             'pipeline' => [
-                /**{$match: {  "oibf": "1f" }}, */
-                ['$match' => ['oibf' => '1f']],
-
-                /**{$lookup: { from: "student",
-                    localField:  "oibf",  	
-                    foreignField:"izbori", 
-                    as: "lista" }}, 
-             */
-                ['$lookup' => ['from' => 'student','localField' => 'oibf','foreignField'=> 'izbori', 'as'=> 'lista']],   
-                
-                /**{$unwind: {
-			path: "$lista"}},  */
-
-                ['$unwind' => ['path' => '$lista']],
-
-                ['$unwind' => ['path' => '$uvjeti']],
-
-                
-                ['$project' => ['_id' => '$lista.oib', 
-                            'zbrojG' => [ '$sum' => [
-                                [ '$multiply' =>  [['$toInt' => '$lista.ocjene.m'], ['$toInt' => '$uvjeti.m']] ],
-                                [ '$multiply' =>  [['$toInt' => '$lista.ocjene.h'], ['$toInt' => '$uvjeti.h']] ],
-                                ['$multiply' =>  [['$toInt' => '$lista.ocjene.e'],['$toInt' => '$uvjeti.e']] ]
-                                ]  ],
-                                
-                            'zbrojN' =>  ['$cond' => [
-                                           'if' => [ 
-                                                '$and' => [
-                                                    '$eq' => ['$lista.natjecanje.naziv', '$uvjeti.natjecanje'],
-                                                    '$eq' => ['$lista.natjecanje.mjesto', '1']
-
-                                                ]
-
-                                            ],
-                                            'then'=> 1000,
-
-                                            'else' => [
-                                                    '$cond' => [
-                                                        'if' => [ '$eq' => ['$lista.natjecanje.naziv', '$uvjeti.natjecanje'] ],
-                                                        'then'=>10,
-                                                        'else'=>0  ]
-                                            ]
-                                       ]
-                            
-                            
-                            ],
-                            
-                            'zbrojI'  =>  [
-
-                                '$cond' =>  ['if' =>  [ '$eq' =>  ['$lista.ocjene.izborni', '$uvjeti.izborni']] ,
-                                     'then' =>  [ '$multiply' =>  [['$toInt' => '$lista.ocjene.izb_oc'], 6]],
-                                     'else' =>  0
-                 
-                                       ]
-                                 ]	,   
-                             'izbor' => ['$indexOfArray' =>  [ '$lista.izbori', '$oibf' ] ]
-
-
-
-                            
-                            
-                            ]],
-        ['$set' =>  [
-            'zbroj' =>  [
-                '$sum' =>  ['$zbrojG','$zbrojN','$zbrojI']
-            ]
+              [ '$match' => [ '_id'=> $oib] ],
+              ['$lookup' =>  [
+              'from' =>  'studenti',
+              'localField' =>  'upisni_list',
+              'foreignField' =>  'username',
+              'as' =>  'enrolled_students'
+            ]], ['$project' =>  [
             
-            ]], 
-            
-            ['$sort' =>  [
-            'zbroj' =>  -1
-            ]]
-
-            ],
+                'enrolled_students' => 1
+            ]]],
             'cursor' => new stdClass,
         ]);
 
-        $result=$db->executeCommand('vjezba', $command)->toArray();
+        $result=$db->executeCommand('project', $command)->toArray();
 
+        if ($result==null) return null;
 
-        var_dump($result);
-
+        return  $result[0]->enrolled_students;
     }
+  
 
-    public function agg2(){
-        echo "you initiated aggregation procedure.";
-
-
-        $db = DB2::getConnection(); 
+    public function startAggreagtion(){
+      echo "You initiated aggregation procedure.";
 
 
+      $this->stvoriTablicuLista();
 
-        $command = new MongoDB\Driver\Command([
-            'aggregate' => 'fakultet',
-            'pipeline' => [
+      sleep(2);
+
+      $faksevi=$this->queryAll("lista");
+      $faksevi=$this->urediFakseve($faksevi);
+
+      $studenti=$this->queryAll("studenti");
+      $studenti=$this->urediStudente($studenti);
+
+      
+
+
+      $this->run($faksevi,$studenti);
+      $this->saveResultsAllFaks();
+      
+
+  }
+
+  public function stvoriTablicuLista(){
+    $db = DB2::getConnection(); 
+
+        
+
+
+    $command = new MongoDB\Driver\Command([
+        'aggregate' => 'fakulteti',
+
+        'pipeline' => 
+
+          [
             
             
-            ['$lookup' =>  [
+          ['$lookup' =>  [
+            'from' =>  'studenti',
+            'localField' =>  'oib',
+            'foreignField' =>  'lista_fakulteta',
+            'as' =>  'lista'
+          ]], 
+          
+          
+          ['$unwind' =>  [
+            'path' =>  '$lista'
+          ]], 
+          
+          ['$unwind' =>  [
+            'path' =>  '$uvjeti'
+          ]], 
+          
+          
+          ['$project' =>  [
+            'oib' =>  '$lista.username',
+            'fakultet' =>  '$oib',
+            'zbrojG' =>  [
+              '$sum' =>  [
+                [
+                  '$multiply' =>  [
+                    [
+                      '$toDouble' =>  '$lista.ocjene.matematika'
+                    ],
+                    [
+                      '$toDouble' =>  '$uvjeti.matematika'
+                    ]
+                  ]
+                ],
+                [
+                  '$multiply' =>  [
+                    [
+                      '$toDouble' =>  '$lista.ocjene.hrvatski'
+                    ],
+                    [
+                      '$toDouble' =>  '$uvjeti.hrvatski'
+                    ]
+                  ]
+                ],
+                [
+                  '$multiply' =>  [
+                    [
+                      '$toDouble' =>  '$lista.ocjene.engleski'
+                    ],
+                    [
+                      '$toDouble' =>  '$uvjeti.engleski'
+                    ]
+                  ]
+                ],
+                [
+                  '$multiply' =>  [
+                    [
+                      '$toDouble' =>  '$lista.ocjene.prosjek'
+                    ],
+                    [
+                      '$toDouble' =>  2
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            'zbrojN' =>  [
+              '$cond' =>  [
+                'if' =>  [
+                  '$and' =>  [
+                    [
+                      '$eq' =>  [
+                        '$lista.drzavna_natjecanja.naziv',
+                        '$uvjeti.natjecanje'
+                      ]
+                    ],
+                    [
+                      '$eq' =>  [
+                        '$lista.drzavna_natjecanja.mjesto',
+                        1
+                      ]
+                    ]
+                  ]
+                ],
+                'then' =>  1000,
+                'else' =>  [
+                  '$cond' =>  [
+                    'if' =>  [
+                      '$eq' =>  [
+                        '$lista.drzavna_natjecanja.naziv',
+                        '$uvjeti.natjecanje'
+                      ]
+                    ],
+                    'then' =>  10,
+                    'else' =>  0
+                  ]
+                ]
+              ]
+            ],
+            'zbrojI' =>  [
+              '$cond' =>  [
+                'if' =>  [
+                  '$eq' =>  [
+                    '$lista.ocjene.izborni.naziv',
+                    '$uvjeti.izborni'
+                  ]
+                ],
+                'then' =>  [
+                  '$multiply' =>  [
+                    [
+                      '$toDouble' =>  '$lista.ocjene.izborni.ocjena'
+                    ],
+                    6
+                  ]
+                ],
+                'else' =>  0
+              ]
+            ],
+            'izbor' =>  [
+              '$indexOfArray' =>  [
+                '$lista.lista_fakulteta',
+                '$oib'
+              ]
+            ],
+            'upisao' =>  '0',
+            '_id' =>  0,
+            'kvota' =>  1
+          ]], 
+          
+          
+          ['$set' =>  [
+            'zbroj' =>  [
+              '$sum' =>  [
+                '$zbrojG',
+                '$zbrojN',
+                '$zbrojI'
+              ]
+            ]
+          ]], 
+          
+          
+          ['$sort' =>  [
+            'fakultet' =>  -1
+          ]], 
+          
+          
+          ['$sort' =>  [
+            'zbroj' =>  -1
+          ]], 
+          
+          
+          ['$group' =>  [
+            '_id' =>  '$fakultet',
+            'kvota' =>  ['$first' =>  '$kvota'],
+          
+              'lista_bodova' =>  [
+              '$push' =>  '$zbroj'
+            ],
+            'oibovi' =>  [
+              '$push' =>  '$oib'
+            ],
+            'izbor' =>  [
+              '$push' =>  '$izbor'
+            ]
+          ]], 
+          
+          ['$out' =>  'lista']
+          
+          ],
+          'cursor' => new stdClass,
+      
+      
+        
+    ]);
 
-            'from' =>  'student',
-           'localField' =>  'oibf',
-           'foreignField' =>  'izbori',
-           'as' =>  'lista'
-         ]], ['$unwind' =>  [
-           'path' =>  '$lista'
-         ]], ['$unwind' =>  [
-         'path' =>  '$uvjeti'
-         ]], ['$project' =>  [
-         
-             'oib' =>  '$lista.oib',
-           'fakultet' =>  '$oibf',
-           'zbrojG' =>  [
-             '$sum' =>  [
-               [
-                 '$multiply' =>  [
-                   [
-                     '$toInt' =>  '$lista.ocjene.m'
-                   ],
-                   [
-                     '$toInt' =>  '$uvjeti.m'
-                   ]
-                 ]
-               ],
-               [
-                 '$multiply' =>  [
-                   [
-                     '$toInt' =>  '$lista.ocjene.h'
-                   ],
-                   [
-                     '$toInt' =>  '$uvjeti.h'
-                   ]
-                 ]
-               ],
-               [
-                 '$multiply' =>  [
-                   [
-                     '$toInt' =>  '$lista.ocjene.e'
-                   ],
-                   [
-                     '$toInt' =>  '$uvjeti.e'
-                   ]
-                 ]
-               ]
-             ]
-           ],
-           'zbrojN' =>  [
-             '$cond' =>  [
-               'if' =>  [
-                 '$and' =>  [
-                   [
-                     '$eq' =>  [
-                       '$lista.natjecanje.naziv',
-                       '$uvjeti.natjecanje'
-                     ]
-                   ],
-                   [
-                     '$eq' =>  [
-                       '$lista.natjecanje.mjesto',
-                       '1'
-                     ]
-                   ]
-                 ]
-               ],
-               'then' =>  1000,
-               'else' =>  [
-                 '$cond' =>  [
-                   'if' =>  [
-                     '$eq' =>  [
-                       '$lista.natjecanje.naziv',
-                       '$uvjeti.natjecanje'
-                     ]
-                   ],
-                   'then' =>  10,
-                   'else' =>  0
-                 ]
-               ]
-             ]
-           ],
-           'zbrojI' =>  [
-             '$cond' =>  [
-               'if' =>  [
-                 '$eq' =>  [
-                   '$lista.ocjene.izborni',
-                   '$uvjeti.izborni'
-                 ]
-               ],
-               'then' =>  [
-                 '$multiply' =>  [
-                   [
-                     '$toInt' =>  '$lista.ocjene.izb_oc'
-                   ],
-                   6
-                 ]
-               ],
-               'else' =>  0
-             ]
-           ],
-           'izbor' =>  [
-             '$indexOfArray' =>  [
-               '$lista.izbori',
-               '$oibf'
-             ]
-           ],
-           'upisao' =>  "0",
-           '_id' =>  0
-         ]], ['$set' =>  [
-           'zbroj' =>  [
-             '$sum' =>  [
-               '$zbrojG',
-               '$zbrojN',
-               '$zbrojI'
-             ]
-         ]
-         ]], ['$sort' =>  [
-           'zbroj' =>  -1
-         ]]],
-         'cursor' => new stdClass
-         
-         ]);
+    $result=$db->executeCommand('project', $command);
 
-        $result=$db->executeCommand('vjezba', $command)->toArray();
+    if ($result==null) return null;
 
+    return true;
 
-        var_dump($result);
+  }
 
-    }
-
-    public function dataS(){
-      $studenti= array();
-
-        $student = new stdClass();
-        $student->ime="A";
-        $student->lista= array("F1","F2","F3");
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        $student = new stdClass();
-        $student->ime="B";
-        $student->lista= array("F3","F2","F1");
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        $student = new stdClass();
-        $student->ime="C";
-        $student->lista= array("F1","F2","F3");
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        $student = new stdClass();
-        $student->ime="D";
-        $student->lista= array("F2","F3","F1");
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        $student = new stdClass();
-        $student->ime="E";
-        $student->lista= array("F3","F2","F1");
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        $student = new stdClass();
-        $student->ime="F";
-        $student->lista= array("F2","F3","F1");
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        $student = new stdClass();
-        $student->ime="G";
-        $student->lista= array("F3","F2","F1");
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        $student = new stdClass();
-        $student->ime="H";
-        $student->lista= array("F2","F1","F3");
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        $student = new stdClass();
-        $student->ime="I";
-        $student->lista= array("F1","F3","F2");
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        $student = new stdClass();
-        $student->ime="J";
-        $student->lista= array("F2","F3","F1");
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        $student = new stdClass();
-        $student->ime="K";
-        $student->lista= array("F1","F2","F3");
-        $student->accepted= array(0,0,0);
-        $studenti[]=$student;
-
-        return $studenti;
-    }
-
-    public function dataF(){
-        $faksevi= array();
-
-        $faks = new stdClass();
-        $faks->ime="F1";
-        $faks->id="F1";
-        $faks->bodovna_lista= array("A", "C", "B","K","E","J","I", "D","F","G","H");
-        $faks->upisni_list=array();
-        $faks->q=3;
-        $faksevi[]= $faks;
-
-        $faks = new stdClass();
-        $faks->ime="F2";
-        $faks->id="F2";
-        $faks->bodovna_lista= array("D", "A", "B","K","C","I", "E","F","J","G","H");
-        $faks->upisni_list=array();
-        $faks->q=3;
-        $faksevi[]= $faks;
-
-        $faks = new stdClass();
-        $faks->ime="F3";
-        $faks->id="F3";
-        $faks->bodovna_lista= array("F", "C", "A","B", "D","H","G","E","I","J","K");
-        $faks->upisni_list=array();
-
-        $faks->q=3;
-
-        $faksevi[]= $faks;
-
-        return $faksevi;
-    }
 
     public function run($faksevi,$studenti){
         echo "you initiated aggregation RESET procedure.";
@@ -596,40 +508,66 @@ class MongoService
         }
         var_dump($studenti);
         var_dump($faksevi);
-    
+
+        $this->rezFaks=$faksevi;
+        $this->rezStud=$studenti;
     }
 
     public function resetAggreagtion(){
+      $db = DB2::getConnection(); 
+      echo "You initiated reset. DON'T CLOSE BROWSER.";
+      $this->resetirajStudente();
 
-      //var_dump($this->dataF()[0]);
-      //$this->run($this->dataF(),$this->dataS());
+      $db->executeCommand('project', new \MongoDB\Driver\Command(["drop" => "lista"]));
 
-      $faksevi=$this->queryAll("lista");
+      //$this->resetirajTablicuLista();
 
-      foreach($faksevi as $f){
-        $f->upisni_list=array();
-        $f->bodovna_lista=$f->oibovi;
-        unset($f->oibovi);
-        unset($f->lista_bodova);
-        $f->id= $f->_id;
-        $f->ime= $f->_id;
-        unset($f->_id);
-        unset($f->izbor);
-        $f->q= 30;
+      
+    }
 
+    public function resetirajStudente(){
+      $db = DB2::getConnection(); 
+      $studenti= $this->queryAll("studenti");
 
+      foreach($studenti as $s){
+        $bulk = new MongoDB\Driver\BulkWrite;
+          $bulk->update(
+            ['username' => $s->username ],
+            ['$set' => ['upisao' =>  null ]],
+            ['multi' => false, 'upsert' => false]
+          );
+  
+          $result = $db->executeBulkWrite("project.studenti",$bulk);
       }
 
-      $studenti=$this->queryAll("studenti");
+    }
 
+    
+    public function urediFakseve($faksevi){
+        foreach($faksevi as $f){
+          $f->upisni_list=array();
+          $f->bodovna_lista=$f->oibovi;
+          unset($f->oibovi);
+          unset($f->lista_bodova);
+          $f->id= $f->_id;
+          $f->ime= $f->_id;
+          unset($f->_id);
+          unset($f->izbor);
+          $f->q= (int)$f->kvota;
+
+
+        }
+        return $faksevi;
+
+    }
+
+    public function urediStudente($studenti){
       foreach($studenti as $key => $s){
 
         if(count($s->lista_fakulteta)==0 ){
           unset($studenti[$key]);
           continue;
         }
-
-
 
           unset($s->datum_rodenja);
           unset($s->prezime);
@@ -655,11 +593,45 @@ class MongoService
           
 
       }
-
-      //var_dump($faksevi[0]);
-      //var_dump($studenti[0]);
-      $this->run($faksevi,$studenti);
+      return $studenti;
     }
+
+    public function saveResultsAllFaks(){
+
+
+
+      $db = DB2::getConnection(); 
+
+      foreach($this->rezFaks as $faks){
+
+        foreach($faks->upisni_list as $oib_studenta){
+          $bulk2 = new MongoDB\Driver\BulkWrite;
+          $bulk2->update(
+            ['username' => $oib_studenta],
+            ['$set' => ['upisao' =>  $faks->id ]],
+            ['multi' => false, 'upsert' => false]
+          );
+  
+          $result2 = $db->executeBulkWrite("project.studenti",$bulk2);
+
+        }
+
+
+
+        $bulk = new MongoDB\Driver\BulkWrite;
+        $bulk->update(
+            ['_id' => $faks->id],
+            ['$set' => ['upisni_list' => $faks->upisni_list  ]],
+            ['multi' => false, 'upsert' => false]
+        );
+  
+        $result = $db->executeBulkWrite("project.lista",$bulk);
+
+      }
+ 
+    }
+
+
 
 
 

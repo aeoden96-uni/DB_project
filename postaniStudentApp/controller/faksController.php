@@ -84,6 +84,8 @@ class FaksController
         $activeInd=1;
         
         $USERTYPE=$this->USERTYPE;
+
+       
         require_once __DIR__ . '/../view/'.$USERTYPE.'/myInfo.php'; 
 
 	}
@@ -97,7 +99,7 @@ class FaksController
         $ime=$_SESSION["username"];
         ////////////////GLOBAL SETTINGS
         $g= new GlobalService();
-    
+        $m= new MongoService();
         $lockDate= $g->getLockDate();
         $lockDateString=$lockDate->toDateTime()->format('d.m.Y');
 
@@ -108,6 +110,13 @@ class FaksController
         $lockBool= $g->getLockBool();
         
         ////////////////GLOBAL SETTINGS
+        
+
+        if($resultBool){
+            $list=$m->getEnrolledStudentsForOIB($_SESSION["faks_oib"]);
+        }
+
+        
 
         
 

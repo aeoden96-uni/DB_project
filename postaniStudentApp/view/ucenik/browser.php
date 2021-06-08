@@ -70,9 +70,9 @@ function checkList($oib,$listaFaksevaUcenika){
                                             <h5 class="card-header">Requirements</h5>
                                             <div class="card-body">
                                             
-                                            <p class="card-text">mathematics '.$faks->uvjeti[0]->matematika.'x</p>
-                                            <p class="card-text">Croatian '.$faks->uvjeti[0]->hrvatski.'x</p>
-                                            <p class="card-text">English '.$faks->uvjeti[0]->engleski.'x</p>
+                                            <p class="card-text">mathematics '.$faks->uvjeti->matematika.'x</p>
+                                            <p class="card-text">Croatian '.$faks->uvjeti->hrvatski.'x</p>
+                                            <p class="card-text">English '.$faks->uvjeti->engleski.'x</p>
                                             </div>
                                         </div>
                                     </div>
@@ -80,7 +80,7 @@ function checkList($oib,$listaFaksevaUcenika){
                                         <div class="card">
                                             <h5 class="card-header">You also get points for</h5>
                                             <div class="card-body">
-                                                <p class="card-text">'.$faks->uvjeti[0]->izborni.'</p>
+                                                <p class="card-text">'.$faks->uvjeti->izborni.'</p>
                                             </div>
                                         </div>
                                     </div>

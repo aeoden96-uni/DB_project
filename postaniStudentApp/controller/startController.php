@@ -220,6 +220,7 @@ class StartController
 			$succesVar="successful.";
 			$_SESSION["account_type"] = "faks";
 			$_SESSION["faks_id"]= $db->_id;
+			$_SESSION["faks_oib"]= $db->oib;
 
 			$_SESSION["naziv"]= $db->naziv;
 

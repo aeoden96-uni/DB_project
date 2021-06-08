@@ -12,4 +12,52 @@
 <p>This is the result list.</p>
 
 
+
+
+<div class="card">
+    <h5 class="card-header">Student list</h5>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">OIB</th>
+                   
+                    <th scope="col">Last Name</th>
+                    <th scope="col">First name</th>
+                   
+                    
+                    
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $ind=0;
+                    foreach($list as $student){
+                        
+                        echo 
+                        '<tr class=" collapse-row collapsed">'.
+                            '<th scope="row">'.$student->username .'</th>'. 
+                           
+                            '<td>'.$student->prezime  .'</td>'.
+                            '<td>'.$student->ime  .'</td>';
+                           
+                            
+
+                        echo '</tr>';
+
+                        
+                        $ind+=1;
+                    }
+                    ?>
+                   
+                </tbody>
+                </table>
+        </div>
+        
+    </div>
+</div>
+
+
+
 <?php include __DIR__ . '/../_footer.php'; ?>
