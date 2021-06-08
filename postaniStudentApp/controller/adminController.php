@@ -89,7 +89,7 @@ class AdminController
         $g= new GlobalService();
         $m= new MongoService();
 
-        //$m->startAggreagtion();
+        $m->agg2();
 
         $g->switchAgregBool(true);
 
@@ -106,7 +106,7 @@ class AdminController
         $g= new GlobalService();
         $m= new MongoService();
 
-        //$m->resetAggreagtion();
+        $m->resetAggreagtion();
 
         $g->switchAgregBool(false);
 

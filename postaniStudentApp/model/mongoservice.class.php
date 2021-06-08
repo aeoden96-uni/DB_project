@@ -257,9 +257,302 @@ class MongoService
 
     }
 
+    public function agg2(){
+        echo "you initiated aggregation procedure.";
+
+
+        $db = DB2::getConnection(); 
+
+
+
+        $command = new MongoDB\Driver\Command([
+            'aggregate' => 'fakultet',
+            'pipeline' => [
+            
+            
+            ['$lookup' =>  [
+
+            'from' =>  'student',
+           'localField' =>  'oibf',
+           'foreignField' =>  'izbori',
+           'as' =>  'lista'
+         ]], ['$unwind' =>  [
+           'path' =>  '$lista'
+         ]], ['$unwind' =>  [
+         'path' =>  '$uvjeti'
+         ]], ['$project' =>  [
+         
+             'oib' =>  '$lista.oib',
+           'fakultet' =>  '$oibf',
+           'zbrojG' =>  [
+             '$sum' =>  [
+               [
+                 '$multiply' =>  [
+                   [
+                     '$toInt' =>  '$lista.ocjene.m'
+                   ],
+                   [
+                     '$toInt' =>  '$uvjeti.m'
+                   ]
+                 ]
+               ],
+               [
+                 '$multiply' =>  [
+                   [
+                     '$toInt' =>  '$lista.ocjene.h'
+                   ],
+                   [
+                     '$toInt' =>  '$uvjeti.h'
+                   ]
+                 ]
+               ],
+               [
+                 '$multiply' =>  [
+                   [
+                     '$toInt' =>  '$lista.ocjene.e'
+                   ],
+                   [
+                     '$toInt' =>  '$uvjeti.e'
+                   ]
+                 ]
+               ]
+             ]
+           ],
+           'zbrojN' =>  [
+             '$cond' =>  [
+               'if' =>  [
+                 '$and' =>  [
+                   [
+                     '$eq' =>  [
+                       '$lista.natjecanje.naziv',
+                       '$uvjeti.natjecanje'
+                     ]
+                   ],
+                   [
+                     '$eq' =>  [
+                       '$lista.natjecanje.mjesto',
+                       '1'
+                     ]
+                   ]
+                 ]
+               ],
+               'then' =>  1000,
+               'else' =>  [
+                 '$cond' =>  [
+                   'if' =>  [
+                     '$eq' =>  [
+                       '$lista.natjecanje.naziv',
+                       '$uvjeti.natjecanje'
+                     ]
+                   ],
+                   'then' =>  10,
+                   'else' =>  0
+                 ]
+               ]
+             ]
+           ],
+           'zbrojI' =>  [
+             '$cond' =>  [
+               'if' =>  [
+                 '$eq' =>  [
+                   '$lista.ocjene.izborni',
+                   '$uvjeti.izborni'
+                 ]
+               ],
+               'then' =>  [
+                 '$multiply' =>  [
+                   [
+                     '$toInt' =>  '$lista.ocjene.izb_oc'
+                   ],
+                   6
+                 ]
+               ],
+               'else' =>  0
+             ]
+           ],
+           'izbor' =>  [
+             '$indexOfArray' =>  [
+               '$lista.izbori',
+               '$oibf'
+             ]
+           ],
+           'upisao' =>  "0",
+           '_id' =>  0
+         ]], ['$set' =>  [
+           'zbroj' =>  [
+             '$sum' =>  [
+               '$zbrojG',
+               '$zbrojN',
+               '$zbrojI'
+             ]
+         ]
+         ]], ['$sort' =>  [
+           'zbroj' =>  -1
+         ]]],
+         'cursor' => new stdClass
+         
+         ]);
+
+        $result=$db->executeCommand('vjezba', $command)->toArray();
+
+
+        var_dump($result);
+
+    }
+
     public function resetAggreagtion(){
         echo "you initiated aggregation RESET procedure.";
+
+
+        $faksevi= array();
+
+        $faks = new stdClass();
+        $faks->ime="F1";
+        $faks->id=1;
+        $faks->bodovna_lista= array("A", "C", "B","E", "D","F","G","H");
+        $faks->upisni_list=array();
+        $faks->q=3;
+        $faksevi[]= $faks;
+
+        $faks = new stdClass();
+        $faks->ime="F2";
+        $faks->id=2;
+        $faks->bodovna_lista= array("D", "A", "B","C", "E","F","G","H");
+        $faks->upisni_list=array();
+        $faks->q=3;
+        $faksevi[]= $faks;
+
+        $faks = new stdClass();
+        $faks->ime="F3";
+        $faks->id=3;
+        $faks->bodovna_lista= array("F", "C", "A","B", "D","H","G","E");
+        $faks->upisni_list=array();
+
+        $faks->q=3;
+
+        $faksevi[]= $faks;
+
+        
+
+        //var_dump($faksevi);
+
+
+        $studenti= array();
+
+        $student = new stdClass();
+        $student->ime="A";
+        $student->lista= array(1,2,3);
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        $student = new stdClass();
+        $student->ime="B";
+        $student->lista= array(3,2,1);
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        $student = new stdClass();
+        $student->ime="C";
+        $student->lista= array(1,2,3);
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        $student = new stdClass();
+        $student->ime="D";
+        $student->lista= array(2,3,1);
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        $student = new stdClass();
+        $student->ime="E";
+        $student->lista= array(3,2,1);
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        $student = new stdClass();
+        $student->ime="F";
+        $student->lista= array(2,3,1);
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        $student = new stdClass();
+        $student->ime="G";
+        $student->lista= array(3,2,1);
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+
+        $student = new stdClass();
+        $student->ime="H";
+        $student->lista= array(2,1,3);
+        $student->accepted= array(0,0,0);
+        $studenti[]=$student;
+        var_dump($studenti);
+        var_dump($faksevi);
+
+        $c=2;
+        while(count($studenti)>0){
+            $studenti=array_values($studenti);
+            $faksevi=array_values($faksevi);
+
+            foreach($faksevi as $f){
+                $f->bodovna_lista=array_values($f->bodovna_lista);
+            }
+                      
+
+
+            foreach($faksevi as $faks){
+                foreach($studenti as $s){
+                    
+                    $index=array_search($s->ime, $faks->bodovna_lista);
+
+                    //if($s->ime=='H'){echo "<br>H index=". $index. " faks=" . $faks->ime. " Q=" . $faks->q. "<br>";}
+
+                    if( $index < $faks->q){
+                        $indexodUcenika=array_search($faks->id, $s->lista);
+                    
+                        $s->accepted[$indexodUcenika]=1;
+                    }
+                }
+            }
+            
+
+
+
+            foreach($studenti as $key => $student){
+                //echo "<br>B index=".$key. " faks=" . "<br>";
+
+                $upisao=array_search(1, $student->accepted);
+                if($upisao>=0 && false !==$upisao){
+                    $id_faksa=$student->lista[$upisao];
+                    $faksevi[$id_faksa-1]->upisni_list[]=$student->ime;
+                    $faksevi[$id_faksa-1]->q--;
+
+                    foreach($faksevi as $f){ //delete all ocurances of this student
+                        if (($key2 = array_search($student->ime, $f->bodovna_lista)) !== false) {
+                            unset($f->bodovna_lista[$key2]);
+                        }
+                    }
+
+                    unset($studenti[$key]);
+                }
+            }
+
+            var_dump($studenti);
+            var_dump($faksevi);
+
+            
+
+
+            $c--;
+        }
+    
     }
+
+    
+
+
+
+
 
 }
 
