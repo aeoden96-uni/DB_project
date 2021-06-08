@@ -20,20 +20,20 @@
             <div class="card-body">
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped" role="progressbar" 
-                        style="width: <?php echo (int)(($ocjene->prosjek)/5*100);?>%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="5">Average (highschool) <?php echo $ocjene->prosjek;?>
+                        style="width: <?php echo (int)(($ocjene->prosjek)/5*100);?>%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="5">Prosjek (srednja škola) <?php echo $ocjene->prosjek;?>
                     </div>
                 </div>
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped bg-info" role="progressbar" 
-                    style="width: <?php echo (int)(($ocjene->matematika)/5*100);?>%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="5">Math <?php echo $ocjene->matematika;?></div>
+                    style="width: <?php echo (int)(($ocjene->matematika)/5*100);?>%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="5">Matematika <?php echo $ocjene->matematika;?></div>
                 </div>
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped  " role="progressbar" 
-                    style="width: <?php echo (int)(($ocjene->hrvatski)/5*100);?>%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="5">Croatian <?php echo $ocjene->hrvatski;?></div>
+                    style="width: <?php echo (int)(($ocjene->hrvatski)/5*100);?>%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="5">Hrvatski <?php echo $ocjene->hrvatski;?></div>
                 </div>
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped bg-info" role="progressbar" 
-                    style="width: <?php echo (int)(($ocjene->engleski)/5*100);?>%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="5">English <?php echo $ocjene->engleski;?></div>
+                    style="width: <?php echo (int)(($ocjene->engleski)/5*100);?>%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="5">Engleski <?php echo $ocjene->engleski;?></div>
                 </div>
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped  " role="progressbar" 
