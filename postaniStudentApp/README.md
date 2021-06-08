@@ -1,2 +1,0 @@
-# webStore
-Postani student APP
