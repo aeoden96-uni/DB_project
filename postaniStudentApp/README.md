@@ -1,2 +1,2 @@
 # webStore
-Web store in PHP 
+Postani student APP

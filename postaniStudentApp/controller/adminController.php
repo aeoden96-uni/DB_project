@@ -93,8 +93,8 @@ class AdminController
 
         $g->switchAgregBool(true);
 
-        header( 'Location: index.php?rt=admin');
-		exit();  
+        //header( 'Location: index.php?rt=admin');
+		//exit();  
 
 	}
 	public function reset() {

@@ -44,11 +44,9 @@ class GlobalService
     function getResultsBool(){
         return $this->queryOne("result_bool");
     } 
-
     function getAgregBool(){
         return $this->queryOne("agreg_bool");
     } 
-
     function switchResultsBool($value){
         return $this->change("REZULTATI_GOTOVI",$value);
     }
