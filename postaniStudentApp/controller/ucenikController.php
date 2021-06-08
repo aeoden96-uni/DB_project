@@ -218,12 +218,16 @@ class UcenikController
         $m= new MongoService();
         $student=$m->returnUcenikWithId($_SESSION["user_id"]);
 
-        if(!isset($student->upisao) || $student->upisao == null){
+
+		$g= new GlobalService();
+        
+		
+		
+        if(!$g->getResultsBool()){
             header( 'Location: index.php?rt=ucenik');
 		    exit();
-
         }
-        if($student->upisao == -1){
+        if($student->upisao == null){
             $upisao= false;
 
         }

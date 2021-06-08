@@ -88,8 +88,8 @@ function checkList($oib,$listaFaksevaUcenika){
                                         <div class="card">
                                             <h5 class="card-header">Quota</h5>
                                             <div class="card-body">
-                                            <h5 class="card-title">Quota title</h5>
-                                            <p class="card-text">text.</p>
+                                            <h5 class="card-title">'.$faks->kvota.' students </h5>
+                                            
                                             </div>
                                         </div>
                                     </div>';

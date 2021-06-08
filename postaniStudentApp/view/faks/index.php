@@ -56,7 +56,7 @@
         <div class="card">
             <h5 class="card-header">Student competition chart</h5>
             <div class="card-body">
-            <iframe style="background: #21313C;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="100%" height="480" src="https://charts.mongodb.com/charts-project-nbp-vmmqp/embed/charts?id=caa20678-1c79-4188-97ad-ec223964cf49&theme=dark"></iframe>
+            <iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="100%" height="480" src="https://charts.mongodb.com/charts-project-nbp-vmmqp/embed/charts?id=caa20678-1c79-4188-97ad-ec223964cf49&theme=light"></iframe>
             </div>
         </div>
     </div>
