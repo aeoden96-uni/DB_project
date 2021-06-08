@@ -7,8 +7,8 @@
         <li class="breadcrumb-item active">My Info</li>
     </ol>
 </nav>
-<h1 class="h2">User info</h1>
-<p>This is the homepage of a simple admin interface which is part of a tutorial written on Themesberg</p>
+<h1 class="h2">Faculty admin info</h1>
+<p>This is your admin information.</p>
 
 
 <!-- DEFINES ELEMENTS ON SAME HORIZONTAL LEVEL --->

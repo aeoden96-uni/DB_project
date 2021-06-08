@@ -9,7 +9,7 @@
     </ol>
 </nav>
 <h1 class="h2">Dashboard</h1>
-<p>This is the homepage of a simple admin interface which is part of a tutorial written on Themesberg</p>
+<p>This is your faculty admin dashboard.</p>
 
 <div class="row my-4">
 
